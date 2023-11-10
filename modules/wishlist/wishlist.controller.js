@@ -1,0 +1,46 @@
+const { errorResponse, successResponse } = require("../../utils/responses")
+const {User,Wishlist,Product} = require("../../models");
+
+const createWishlist = async(req,res)=>{
+try {
+    const {
+        user_uuid
+    } = req.body;
+    const uuid = req.params.uuid;
+    const user = await User.findOne({
+      uuid: user_uuid
+    })
+    const product = await Product.findOne({
+       uuid
+    })
+    const wishlist = await Wishlist.create({
+        userId:user.id,
+        productId:product.id
+    })
+    
+    successResponse(res,wishlist)
+} catch (error) {
+    errorResponse(res,error)
+}
+}
+
+
+
+    const deleteWishlist = async(req,res)=>{
+        try {
+            const uuid = req.params.uuid
+            const Wishlist = await Wishlist.findOne({
+                where:{
+                    uuid
+                }
+            });
+            const response = await Wishlist.destroy()
+            successResponse(res,response)
+        } catch (error) {
+            errorResponse(res,error)
+        }
+    }
+
+module.exports = {
+    createWishlist,deleteWishlist
+}

@@ -1,0 +1,110 @@
+const { errorResponse, successResponse } = require("../../utils/responses")
+const {Product,Business,Pledge,ProductImage} = require("../../models");
+const getUrl = require("../../utils/cloudinary_upload");
+
+
+const createProduct = async(req,res)=>{
+try {
+  
+    const {
+        name,oldPrice,newPrice,amount,description
+    } = req.body;
+    const uuid = req.params.uuid
+    const business = await Business.findOne({
+        where:{
+            uuid
+        }
+    });
+    const response = await Product.create({
+        name,oldPrice,newPrice,amount,description,businessId:business.id
+    })
+    successResponse(res,response)
+} catch (error) {
+    errorResponse(res,error)
+}
+}
+
+const updateProduct = async(req,res)=>{
+    try {
+       
+        const uuid = req.params.uuid
+        const product = await Product.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await product.update({...req.body})
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+    }
+    
+const getProducts = async(req,res)=>{
+    try {
+        console.log("Get products")
+        const uuid = req.params.uuid
+        const business = await Business.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await Product.findAll({
+            where:{
+                businessId:business.id
+            },
+            include:[ProductImage]
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+const getProduct = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const Product = await Product.findOne({
+            where:{
+                uuid
+            }
+        });
+        successResponse(res,Product)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+const BusinessProductCount = async(req,res)=>{
+    try {
+         const uuid = req.params.uuid
+         const Business = await Business.findOne({
+            where:{
+                uuid
+            }
+         })
+         const count = await Product.count({
+            where:{
+                BusinessId:Business.id
+            }
+         })
+         successResponse(res,count)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+const deleteProducts = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const event = await Product.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await event.destroy()
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+module.exports = {
+    createProduct,updateProduct,getProducts
+}
