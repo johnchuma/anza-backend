@@ -42,17 +42,9 @@ const updateProduct = async(req,res)=>{
     
 const getProducts = async(req,res)=>{
     try {
-        console.log("Get products")
-        const uuid = req.params.uuid
-        const business = await Business.findOne({
-            where:{
-                uuid
-            }
-        });
+    
         const response = await Product.findAll({
-            where:{
-                businessId:business.id
-            },
+           
             include:[ProductImage]
         })
         successResponse(res,response)

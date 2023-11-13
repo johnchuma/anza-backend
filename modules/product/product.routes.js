@@ -4,6 +4,6 @@ const { createProduct, updateProduct, getProducts } = require('./product.control
 const router = Router()
 router.post("/:uuid",createProduct)
 router.patch("/:uuid",updateProduct)
-router.get("/business/:uuid",getProducts)
+router.get("/",getProducts)
 
 module.exports = router
