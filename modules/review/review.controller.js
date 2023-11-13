@@ -19,7 +19,9 @@ const createReview = async(req,res)=>{
                     uuid:user_uuid
                 }
             });   
-            userId = user.id         
+            userId = user.id
+            name = user.name
+            email = user.email     
         }
         const response = await Review.create({
             rate,comment,name,email,userId,productId:product.id

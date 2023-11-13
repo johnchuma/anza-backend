@@ -271,6 +271,29 @@ const deleteUser = async(req,res)=>{
     }
   };
 
+  const getAllUsers = async(req,res)=>{
+    try {
+        const response = await User.findAll({
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+const getUserDetails = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const user = await User.findOne({
+            where:{
+                uuid
+            },
+        });
+        successResponse(res,user)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
  
 //   const getAllUsers = async(req,res)=>{
 //     try {
@@ -378,5 +401,7 @@ const deleteUser = async(req,res)=>{
     sendMessage,
     sendPasswordLink,
     passwordReset,
-    pushSMS
+    pushSMS,
+    getUserDetails,
+    getAllUsers
   }

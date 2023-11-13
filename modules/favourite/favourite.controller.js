@@ -27,21 +27,21 @@ const createFavourite = async(req,res)=>{
     }
 }
     
-// const updateFavourite = async(req,res)=>{
-//     try {
+const updateFavourite = async(req,res)=>{
+    try {
         
-//         const uuid = req.params.uuid
-//         const favourite = await Favourite.findOne({
-//             where:{
-//                 uuid
-//             }
-//         });
-//         const response = await favourite.update({...req.body})
-//         successResponse(res,response)
-//     } catch (error) {
-//         errorResponse(res,error)
-//     }
-// }
+        const uuid = req.params.uuid
+        const favourite = await Favourite.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await favourite.update({...req.body})
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
         
 const getFavourites = async(req,res)=>{
     try {
