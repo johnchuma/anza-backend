@@ -112,5 +112,5 @@ const getFeaturedProducts = async(req,res)=>{
 }
 
 module.exports = {
-    createProduct,updateProduct,getProducts,getFeaturedProducts
+    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts
 }

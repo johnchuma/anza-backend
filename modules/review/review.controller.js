@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Review, Product} = require("../../models");
+const {Review, Product, User} = require("../../models");
 
 
 const createReview = async(req,res)=>{
