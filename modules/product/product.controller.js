@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Product,Business,Pledge,ProductImage} = require("../../models");
+const {Product,Business,Pledge,ProductImage,BusinessSector} = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
 
 
@@ -111,6 +111,27 @@ const getFeaturedProducts = async(req,res)=>{
     }
 }
 
+const getBusinessSectorProducts = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const businessSector = await BusinessSector.findOne({
+            uuid
+        })
+
+        const response = await Product.findAll({
+            include: [{
+                model: Business,
+                where: {
+                    businessSectorId: businessSector.id
+                }
+            }]
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
 module.exports = {
-    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts
+    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts
 }
