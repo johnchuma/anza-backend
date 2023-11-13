@@ -100,12 +100,12 @@ const deleteProducts = async(req,res)=>{
 
 const getFeaturedProducts = async(req,res)=>{
     try {
-        const Product = await Product.findAll({
+        const product = await Product.findAll({
             where:{
-                isFeatured: true
+                isFeatured:true
             }
         });
-        successResponse(res,Product)
+        successResponse(res,product)
     } catch (error) {
         errorResponse(res,error)
     }
