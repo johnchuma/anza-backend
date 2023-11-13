@@ -59,12 +59,7 @@ const getProduct = async(req,res)=>{
             where:{
                 uuid
             },
-            // include:[
-            //     ProductImage
-            //     // {
-            //     //     model: Review,
-            //     // }
-            // ]
+            include:[ProductImage]
         });
         successResponse(res,product)
     } catch (error) {

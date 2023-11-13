@@ -13,16 +13,13 @@ const createFavourite = async(req,res)=>{
                 uuid:product_uuid
             }
         });
-        if (user_uuid !== null && user_uuid !== "") {
-            const user = await User.findOne({
-                where:{
-                    uuid:user_uuid
-                }
-            });   
-            userId = user.id         
-        }
+        const user = await User.findOne({
+            where:{
+                uuid:uuid
+            }
+        }); 
         const response = await Favourite.create({
-            rate,comment,name,email,userId,productId:product.id
+            userId:user.id,productId:product.id
         })
         successResponse(res,response)
     } catch (error) {
@@ -30,25 +27,29 @@ const createFavourite = async(req,res)=>{
     }
 }
     
-const updateFavourite = async(req,res)=>{
-    try {
+// const updateFavourite = async(req,res)=>{
+//     try {
         
-        const uuid = req.params.uuid
-        const favourite = await Favourite.findOne({
-            where:{
-                uuid
-            }
-        });
-        const response = await favourite.update({...req.body})
-        successResponse(res,response)
-    } catch (error) {
-        errorResponse(res,error)
-    }
-}
+//         const uuid = req.params.uuid
+//         const favourite = await Favourite.findOne({
+//             where:{
+//                 uuid
+//             }
+//         });
+//         const response = await favourite.update({...req.body})
+//         successResponse(res,response)
+//     } catch (error) {
+//         errorResponse(res,error)
+//     }
+// }
         
 const getFavourites = async(req,res)=>{
     try {
         const response = await Favourite.findAll({
+            include: [
+                User,
+                Product
+            ]
         })
         successResponse(res,response)
     } catch (error) {
@@ -62,7 +63,11 @@ const getFavourite = async(req,res)=>{
         const favourite = await Favourite.findOne({
             where:{
                 uuid
-            }
+            },
+            include: [
+                User,
+                Product
+            ]
         });
         successResponse(res,favourite)
     } catch (error) {
