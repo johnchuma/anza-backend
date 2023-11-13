@@ -55,12 +55,12 @@ const getProducts = async(req,res)=>{
 const getProduct = async(req,res)=>{
     try {
         const uuid = req.params.uuid
-        const Product = await Product.findOne({
+        const product = await Product.findOne({
             where:{
                 uuid
             }
         });
-        successResponse(res,Product)
+        successResponse(res,product)
     } catch (error) {
         errorResponse(res,error)
     }
