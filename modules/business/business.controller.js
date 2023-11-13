@@ -6,9 +6,8 @@ try {
     const {
         name,
         region,
-        businessSectorId,
+        business_sector_uuid,
         description,
-        active
     } = req.body;
     const uuid = req.params.uuid
     const user = await User.findOne({
@@ -18,7 +17,7 @@ try {
     })
     const businessSector = await BusinessSector.findOne({
         where:{
-            uuid: businessSectorId
+            uuid: business_sector_uuid
         }
     })
     const response = await Business.create({
@@ -27,7 +26,6 @@ try {
         userId:user.id,
         businessSectorId: businessSector.id,
         description,
-        active
     })
     successResponse(res,response)
 } catch (error) {
