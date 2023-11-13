@@ -1,40 +1,41 @@
 'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    await queryInterface.createTable('businesses', {
+    await queryInterface.createTable('Reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      uuid: {
+      uuid:{
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull:false
-      },
-      userId:{
+      rate:{
         type:DataTypes.INTEGER,
         allowNull:false
        },
-       businessSectorId:{
+      comment:{
         type: DataTypes.STRING, 
-        allowNull:true  
+        allowNull:false  
       },
-      region:{
+      name:{
         type: DataTypes.STRING, 
-        allowNull:true  
+        allowNull:true
       },
-      description:{
+      email:{
         type: DataTypes.STRING, 
         allowNull:true 
       },
-      active:{
-        type: DataTypes.BOOLEAN, 
-        defaultValue:false
+      productId:{
+        type:DataTypes.INTEGER,
+        allowNull:false
+      },
+      userId:{
+        type: DataTypes.STRING, 
+        allowNull:true
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('businesses');
+    await queryInterface.dropTable('Reviews');
   }
 };

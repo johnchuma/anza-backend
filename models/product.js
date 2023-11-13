@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Product.hasMany(models.ProductImage)
+      Product.belongsTo(models.Business)
       // Product.hasMany(models.OrderProduct)
     }
   }
@@ -42,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     amount: {
       type: DataTypes.DOUBLE,
       allowNull:false  
+    },
+    isFeatured: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   }, {
     sequelize,

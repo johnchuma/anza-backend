@@ -1,13 +1,14 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Business,User} = require("../../models");
+const {Business,User,BusinessSector} = require("../../models");
 
 const createBusiness = async(req,res)=>{
 try {
     const {
         name,
         region,
-        sector,
-        description
+        businessSectorId,
+        description,
+        active
     } = req.body;
     const uuid = req.params.uuid
     const user = await User.findOne({
@@ -15,12 +16,18 @@ try {
             uuid
         }
     })
+    const businessSector = await BusinessSector.findOne({
+        where:{
+            uuid: businessSectorId
+        }
+    })
     const response = await Business.create({
         name,
         region,
-        businessSector:sector,
+        userId:user.id,
+        businessSectorId: businessSector.id,
         description,
-        userId:user.id
+        active
     })
     successResponse(res,response)
 } catch (error) {
@@ -45,7 +52,7 @@ const getUserBusiness = async(req,res)=>{
     } catch (error) {
         errorResponse(res,error)
     }
-    }
+}
     const updateBusiness = async(req,res)=>{
         try {
             const uuid = req.params.uuid

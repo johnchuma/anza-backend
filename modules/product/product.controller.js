@@ -4,24 +4,24 @@ const getUrl = require("../../utils/cloudinary_upload");
 
 
 const createProduct = async(req,res)=>{
-try {
-  
-    const {
-        name,oldPrice,newPrice,amount,description
-    } = req.body;
-    const uuid = req.params.uuid
-    const business = await Business.findOne({
-        where:{
-            uuid
-        }
-    });
-    const response = await Product.create({
-        name,oldPrice,newPrice,amount,description,businessId:business.id
-    })
-    successResponse(res,response)
-} catch (error) {
-    errorResponse(res,error)
-}
+    try {
+    
+        const {
+            name,oldPrice,newPrice,amount,description,isFeatured
+        } = req.body;
+        const uuid = req.params.uuid
+        const business = await Business.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await Product.create({
+            name,oldPrice,newPrice,amount,isFeatured,description,businessId:business.id
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
 }
 
 const updateProduct = async(req,res)=>{
@@ -105,6 +105,20 @@ const deleteProducts = async(req,res)=>{
         errorResponse(res,error)
     }
 }
+
+const getFeaturedProducts = async(req,res)=>{
+    try {
+        const Product = await Product.findAll({
+            where:{
+                isFeatured: true
+            }
+        });
+        successResponse(res,Product)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
 module.exports = {
-    createProduct,updateProduct,getProducts
+    createProduct,updateProduct,getProducts,getFeaturedProducts
 }

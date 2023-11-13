@@ -3,51 +3,49 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Business extends Model {
+  class Review extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Review.belongsTo(models.Product)
       // define association here
-      Business.belongsTo(models.User);
-      Business.belongsTo(models.BusinessSector);
-      Business.hasMany(models.Product);
     }
   }
-  Business.init({
+  Review.init({
     uuid:{
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    userId:{
+    rate:{
       type:DataTypes.INTEGER,
       allowNull:false
      },
-     name: {
-       type: DataTypes.STRING,
-       allowNull:false
-     },
-    businessSectorId:{
-      type: DataTypes.INTEGER, 
+    comment:{
+      type: DataTypes.STRING, 
       allowNull:false  
     },
-    region:{
+    name:{
       type: DataTypes.STRING, 
       allowNull:true
     },
-    description:{
+    email:{
       type: DataTypes.STRING, 
       allowNull:true 
     },
-    active:{
-      type: DataTypes.BOOLEAN, 
-      defaultValue:false
+    productId:{
+      type:DataTypes.INTEGER,
+      allowNull:false
+    },
+    userId:{
+      type: DataTypes.STRING, 
+      allowNull:true
     },
   }, {
     sequelize,
-    modelName: 'Business',
+    modelName: 'Review',
   });
-  return Business;
+  return Review;
 };

@@ -36,6 +36,10 @@ module.exports = {
         type: DataTypes.DOUBLE,
         allowNull:false  
       },
+      isFeatured: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
