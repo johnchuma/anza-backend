@@ -59,9 +59,12 @@ const getProduct = async(req,res)=>{
             where:{
                 uuid
             },
-            include:[ProductImage,{
-                model: Review,
-            }],
+            // include:[
+            //     ProductImage
+            //     // {
+            //     //     model: Review,
+            //     // }
+            // ]
         });
         successResponse(res,product)
     } catch (error) {
@@ -124,7 +127,8 @@ const getBusinessSectorProducts = async(req,res)=>{
         })
 
         const response = await Product.findAll({
-            include: [{
+            include: [
+                ProductImage,{
                 model: Business,
                 where: {
                     businessSectorId: businessSector.id
