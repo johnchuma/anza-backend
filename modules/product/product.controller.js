@@ -115,7 +115,9 @@ const getBusinessSectorProducts = async(req,res)=>{
     try {
         const uuid = req.params.uuid
         const businessSector = await BusinessSector.findOne({
-            uuid
+            where: {
+                uuid
+            }
         })
 
         const response = await Product.findAll({

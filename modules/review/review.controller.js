@@ -4,19 +4,19 @@ const {Review, Product, User} = require("../../models");
 
 const createReview = async(req,res)=>{
     try {
-      
+        var userId = null;
         const {
-            rate,comment,name,email,userId,productId
+            rate,comment,name,email,user_uuid,product_uuid
         } = req.body;
         const product = await Product.findOne({
             where:{
-                uuid:productId
+                uuid:product_uuid
             }
         });
-        if (userId != null) {
+        if (user_uuid !== null && user_uuid !== "") {
             const user = await User.findOne({
                 where:{
-                    uuid:userId
+                    uuid:user_uuid
                 }
             });   
             userId = user.id         
