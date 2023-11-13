@@ -1,0 +1,73 @@
+const { errorResponse, successResponse } = require("../../utils/responses")
+const {Favourite, Product, User} = require("../../models");
+
+
+const createFavourite = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const {
+            product_uuid
+        } = req.body;
+        const product = await Product.findOne({
+            where:{
+                uuid:product_uuid
+            }
+        });
+        if (user_uuid !== null && user_uuid !== "") {
+            const user = await User.findOne({
+                where:{
+                    uuid:user_uuid
+                }
+            });   
+            userId = user.id         
+        }
+        const response = await Favourite.create({
+            rate,comment,name,email,userId,productId:product.id
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+    
+const updateFavourite = async(req,res)=>{
+    try {
+        
+        const uuid = req.params.uuid
+        const favourite = await Favourite.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await favourite.update({...req.body})
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+        
+const getFavourites = async(req,res)=>{
+    try {
+        const response = await Favourite.findAll({
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+const getFavourite = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const favourite = await Favourite.findOne({
+            where:{
+                uuid
+            }
+        });
+        successResponse(res,favourite)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+module.exports = {createFavourite, updateFavourite, getFavourites, getFavourite}

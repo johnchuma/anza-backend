@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasOne(models.Business);
       User.hasMany(models.Order);
+      User.hasMany(models.Favourite);
     }
   }
   

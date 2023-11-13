@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Product,Business,Pledge,ProductImage,BusinessSector} = require("../../models");
+const {Product,Business,Pledge,ProductImage,BusinessSector,Review} = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
 
 
@@ -58,7 +58,10 @@ const getProduct = async(req,res)=>{
         const product = await Product.findOne({
             where:{
                 uuid
-            }
+            },
+            include:[ProductImage,{
+                model: Review,
+            }],
         });
         successResponse(res,product)
     } catch (error) {

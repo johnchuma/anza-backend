@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Product.hasMany(models.ProductImage)
+      Product.hasMany(models.Favourite)
+      Product.hasMany(models.Review)
       Product.belongsTo(models.Business)
       // Product.hasMany(models.OrderProduct)
     }
