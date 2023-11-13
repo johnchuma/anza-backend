@@ -6,6 +6,7 @@ router.post("/:uuid",createProduct)
 router.patch("/:uuid",updateProduct)
 router.get("/business/:uuid",getProducts)
 router.get("/featured",getFeaturedProducts)
+router.get("/:uuid",getProduct)
 router.get("/",getProducts)
 router.get('/business_sector/:uuid',getBusinessSectorProducts)
 
