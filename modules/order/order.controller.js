@@ -74,6 +74,7 @@ const getSpecificBusinessOrders = async(req,res)=>{
                 model:OrderProduct,
                 include:{
                     model:Product,
+                    required: true,
                     where:{
                         businessId:business.id
                     }
