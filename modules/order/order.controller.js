@@ -117,6 +117,21 @@ const deleteOrder = async(req,res)=>{
     }
 }
 
+const updateOrderProduct = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const orderProduct = await OrderProduct.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await orderProduct.update({...req.body})
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
 module.exports = {
-    createOrder,deleteOrderProduct,deleteOrder,getCustomerOrders,getSpecificBusinessOrders
+    createOrder,deleteOrderProduct,deleteOrder,getCustomerOrders,getSpecificBusinessOrders,updateOrderProduct
 }
