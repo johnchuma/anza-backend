@@ -64,7 +64,7 @@ const getUserBusiness = async(req,res)=>{
         } catch (error) {
             errorResponse(res,error)
         }
-        }
+    }
 
     const deleteBusiness = async(req,res)=>{
         try {
@@ -82,7 +82,7 @@ const getUserBusiness = async(req,res)=>{
         } catch (error) {
             errorResponse(res,error)
         }
-        }
+    }
     
 const getCategories = async(req,res)=>{
     try {
@@ -93,6 +93,15 @@ const getCategories = async(req,res)=>{
     }
 }
 
+const getAllBusiness = async(req, res) =>{
+    try {
+        const response = await Business.findAll()
+        successResponse(res, response)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
+
 module.exports = {
-    createBusiness,updateBusiness,getCategories,deleteBusiness,getUserBusiness
+    createBusiness,updateBusiness,getCategories,deleteBusiness,getUserBusiness,getAllBusiness
 }
