@@ -8,14 +8,20 @@ try {
     } = req.body;
     const uuid = req.params.uuid;
     const user = await User.findOne({
-      uuid: user_uuid
+        where:{
+            uuid: user_uuid
+        }
     })
     const product = await Product.findOne({
-       uuid
+        where:{
+            uuid
+        }
     })
     const wishlist = await Wishlist.create({
-        userId:user.id,
-        productId:product.id
+        where:{
+            userId:user.id,
+            productId:product.id
+        }
     })
     
     successResponse(res,wishlist)
