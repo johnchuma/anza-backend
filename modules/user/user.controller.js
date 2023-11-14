@@ -279,7 +279,21 @@ const deleteUser = async(req,res)=>{
     } catch (error) {
         errorResponse(res,error)
     }
-}
+  }
+
+  const getAllSellers = async(req,res)=>{
+    try {
+        const response = await User.findAll({
+          include:[Business],
+          where:{
+            role: "seller"
+          }
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+  }
 
 const getUserDetails = async(req,res)=>{
     try {
@@ -403,5 +417,6 @@ const getUserDetails = async(req,res)=>{
     passwordReset,
     pushSMS,
     getUserDetails,
-    getAllUsers
+    getAllUsers,
+    getAllSellers
   }
