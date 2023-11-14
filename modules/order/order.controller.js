@@ -76,6 +76,7 @@ const getSpecificBusinessOrders = async(req,res)=>{
                 include:{
                     model:Product,
                     required: true,
+                    include:[ProductImage],
                     where:{
                         businessId:business.id
                     },
