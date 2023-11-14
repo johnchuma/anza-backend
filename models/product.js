@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.Review)
       Product.hasMany(models.Wishlist)
       Product.belongsTo(models.Business)
+      // Product.belongsTo(models.OrderProduct)
       // Product.hasMany(models.OrderProduct)
     }
   }

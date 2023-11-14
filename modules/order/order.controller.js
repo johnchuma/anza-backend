@@ -41,20 +41,22 @@ const getCustomerOrders = async(req,res)=>{
             }
         });
         const response = await Order.findAll({
-            userId:user.id,
-            includes:[{
+            where:{
+                userId:user.id,
+            },
+            include:[{
                 model:OrderProduct,
-                includes:{
+                include:[{
                     model:Product,
-                    include:{ProductImage}
-                }
+                    include:[ProductImage]
+                }]
             }]
         });
         successResponse(res,response)
     } catch (error) {
         errorResponse(res,error)
     }
-    }
+}
 
     const getSpecificBusinessOrders = async(req,res)=>{
         try {
