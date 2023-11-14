@@ -55,7 +55,10 @@ const getReviews = async(req,res)=>{
                 ['createdAt', 'DESC']
             ]
         })
-        successResponse(res,response)
+        const sum = await Review.sum("rate")
+        const count = await Review.count({
+        })
+        successResponse(res,{response,"rate":(sum/count)})
     } catch (error) {
         errorResponse(res,error)
     }
