@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.ProductImage)
       Product.hasMany(models.Favourite)
       Product.hasMany(models.Review)
+      Product.hasMany(models.Wishlist)
       Product.belongsTo(models.Business)
       // Product.hasMany(models.OrderProduct)
     }

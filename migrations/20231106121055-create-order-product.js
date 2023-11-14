@@ -24,6 +24,10 @@ module.exports = {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
+      isDelivered:{
+       type:DataTypes.BOOLEAN,
+       defaultValue:false
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE

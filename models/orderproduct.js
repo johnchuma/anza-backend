@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
+     isDelivered:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
+     },
   }, {
     sequelize,
     modelName: 'OrderProduct',

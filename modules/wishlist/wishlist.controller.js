@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {User,Wishlist,Product} = require("../../models");
+const {User,Wishlist,Product,ProductImage} = require("../../models");
 
 const createWishlist = async(req,res)=>{
 try {
@@ -79,7 +79,11 @@ try {
             const response = await Wishlist.findAll({
                 where:{
                     userId: user.id,
-                }
+                },
+                include:[{
+                    model:Product,
+                    include: [ProductImage]
+                }]
             })
             successResponse(res,response)
         } catch (error) {
