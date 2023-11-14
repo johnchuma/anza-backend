@@ -143,7 +143,7 @@ const getFeaturedProducts = async(req,res)=>{
                             SELECT AVG(rate)
                             FROM Reviews AS review
                             WHERE
-                                productId = product.id
+                                productId = Product.id
                         )`),
                         'rating'
                     ]
