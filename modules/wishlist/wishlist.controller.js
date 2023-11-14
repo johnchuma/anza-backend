@@ -56,13 +56,13 @@ try {
                     uuid
                 }
             });
-            const response = await Wishlist.findOne({
+            const response = await Wishlist.count({
                 where:{
                     productId: product.id,
                     userId: user.id,
                 }
             })
-            successResponse(res,response)
+            successResponse(res,{isAdded:response>0?true:false})
         } catch (error) {
             errorResponse(res,error)
         }
