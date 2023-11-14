@@ -18,10 +18,8 @@ try {
         }
     })
     const wishlist = await Wishlist.create({
-        where:{
-            userId:user.id,
-            productId:product.id
-        }
+        userId:user.id,
+        productId:product.id
     })
     
     successResponse(res,wishlist)
