@@ -76,11 +76,14 @@ const getSpecificBusinessOrders = async(req,res)=>{
                     model:Product,
                     where:{
                         businessId:business.id
-                    }
+                    },
+                    required:true
                 }
-                
-            }]
+            }
+        
+        ]
         });
+        
         successResponse(res,response)
     } catch (error) {
         errorResponse(res,error)
