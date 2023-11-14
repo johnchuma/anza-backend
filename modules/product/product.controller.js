@@ -2,6 +2,7 @@ const { errorResponse, successResponse } = require("../../utils/responses")
 const {Product,Business,Pledge,ProductImage,BusinessSector,Review, Sequelize} = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
 
+const {Op} = require('sequelize');
 
 
 const createProduct = async(req,res)=>{
@@ -53,7 +54,7 @@ const getProducts = async(req,res)=>{
                             SELECT AVG(rate)
                             FROM Reviews AS review
                             WHERE
-                                productId = product.id
+                                productId = Product.id
                         )`),
                         'rating'
                     ]
@@ -81,7 +82,7 @@ const getProduct = async(req,res)=>{
                             SELECT AVG(rate)
                             FROM Reviews AS review
                             WHERE
-                                productId = product.id
+                                productId = Product.id
                         )`),
                         'rating'
                     ]
@@ -143,12 +144,41 @@ const getFeaturedProducts = async(req,res)=>{
                             SELECT AVG(rate)
                             FROM Reviews AS review
                             WHERE
-                                productId = product.id
+                                productId = Product.id
                         )`),
                         'rating'
                     ]
                 ],
             }
+        });
+        successResponse(res,product)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+const getTopRatedProducts = async(req,res)=>{
+    try {
+        const product = await Product.findAll({
+            limit: 1,
+            attributes:{
+                exclude: ['BusinessId'],
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
+                    ]
+                ],
+            },
+            order: [
+                [Sequelize.literal('rating'), 'DESC']
+            ],
+            include: [ProductImage]
         });
         successResponse(res,product)
     } catch (error) {
@@ -181,5 +211,5 @@ const getBusinessSectorProducts = async(req,res)=>{
 }
 
 module.exports = {
-    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts
+    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts,getTopRatedProducts
 }
