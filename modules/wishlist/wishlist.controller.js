@@ -41,6 +41,52 @@ try {
         }
     }
 
+
+    const isInWishlist = async(req,res)=>{
+        try {
+            const uuid = req.params.uuid
+            const {user_uuid} = req.body
+            const user = await User.findOne({
+                where:{
+                    uuid: user_uuid
+                }
+            });
+            const product = await Product.findOne({
+                where:{
+                    uuid
+                }
+            });
+            const response = await Wishlist.findOne({
+                where:{
+                    productId: product.id,
+                    userId: user.id,
+                }
+            })
+            successResponse(res,response)
+        } catch (error) {
+            errorResponse(res,error)
+        }
+    }
+
+    const myWishlist = async(req,res)=>{
+        try {
+            const uuid = req.params.uuid
+            const user = await User.findOne({
+                where:{
+                    uuid
+                }
+            });
+            const response = await Wishlist.findAll({
+                where:{
+                    userId: user.id,
+                }
+            })
+            successResponse(res,response)
+        } catch (error) {
+            errorResponse(res,error)
+        }
+    }
+
 module.exports = {
-    createWishlist,deleteWishlist
+    createWishlist,deleteWishlist,isInWishlist,myWishlist
 }
