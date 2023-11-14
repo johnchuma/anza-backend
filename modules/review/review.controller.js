@@ -51,6 +51,9 @@ const updateReview = async(req,res)=>{
 const getReviews = async(req,res)=>{
     try {
         const response = await Review.findAll({
+            order: [
+                ['createdAt', 'DESC']
+            ]
         })
         successResponse(res,response)
     } catch (error) {

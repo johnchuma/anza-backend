@@ -109,7 +109,8 @@ const getFeaturedProducts = async(req,res)=>{
         const product = await Product.findAll({
             where:{
                 isFeatured:true
-            }
+            },
+            include: [ProductImage]
         });
         successResponse(res,product)
     } catch (error) {

@@ -3,10 +3,10 @@ const { createProduct, updateProduct, getProduct, getProducts, getFeaturedProduc
 
 const router = Router()
 router.post("/:uuid",createProduct)
+router.get("/featured",getFeaturedProducts)
 router.get("/:uuid",getProduct)
 router.patch("/:uuid",updateProduct)
 router.get("/business/:uuid",getProducts)
-router.get("/featured",getFeaturedProducts)
 router.get("/",getProducts)
 router.get('/business_sector/:uuid',getBusinessSectorProducts)
 
