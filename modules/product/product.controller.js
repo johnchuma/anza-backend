@@ -1,6 +1,7 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Product,Business,Pledge,ProductImage,BusinessSector,Review} = require("../../models");
+const {Product,Business,Pledge,ProductImage,BusinessSector,Review, Sequelize} = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
+
 
 
 const createProduct = async(req,res)=>{
@@ -44,8 +45,20 @@ const getProducts = async(req,res)=>{
     try {
     
         const response = await Product.findAll({
-           
-            include:[ProductImage]
+            include:[ProductImage],
+            attributes:{
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = product.id
+                        )`),
+                        'rating'
+                    ]
+                ],
+            }
         })
         successResponse(res,response)
     } catch (error) {
@@ -55,12 +68,24 @@ const getProducts = async(req,res)=>{
 const getProduct = async(req,res)=>{
     try {
         const uuid = req.params.uuid
+        // res.status(200).send({"productId":current_product})
         const product = await Product.findOne({
             where:{
                 uuid
             },
             attributes:{
-                exclude:["BusinessId"]
+                exclude:["BusinessId"], 
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = product.id
+                        )`),
+                        'rating'
+                    ]
+                ],
             },
             include:[
                 Review,ProductImage
@@ -110,7 +135,20 @@ const getFeaturedProducts = async(req,res)=>{
             where:{
                 isFeatured:true
             },
-            include: [ProductImage]
+            include: [ProductImage],
+            attributes:{
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = product.id
+                        )`),
+                        'rating'
+                    ]
+                ],
+            }
         });
         successResponse(res,product)
     } catch (error) {
