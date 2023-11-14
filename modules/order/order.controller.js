@@ -41,6 +41,7 @@ const getCustomerOrders = async(req,res)=>{
             }
         });
         const response = await Order.findAll({
+            order:['createdAt', 'DESC'],
             where:{
                 userId:user.id,
             },

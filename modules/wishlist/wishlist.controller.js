@@ -29,12 +29,12 @@ try {
     const deleteWishlist = async(req,res)=>{
         try {
             const uuid = req.params.uuid
-            const Wishlist = await Wishlist.findOne({
+            const wishlist = await Wishlist.findOne({
                 where:{
                     uuid
                 }
             });
-            const response = await Wishlist.destroy()
+            const response = await wishlist.destroy()
             successResponse(res,response)
         } catch (error) {
             errorResponse(res,error)

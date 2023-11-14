@@ -24,9 +24,9 @@ module.exports = {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
-      isDelivered:{
-       type:DataTypes.BOOLEAN,
-       defaultValue:false
+      status:{
+       type:DataTypes.ENUM('open', 'closed','delivered'),
+       defaultValue:"open"
       },
       createdAt: {
         allowNull: false,
