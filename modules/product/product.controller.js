@@ -300,7 +300,31 @@ const searchProduct = async(req, res) => {
         const results = await Product.findAll({
             where:{
                 name: { [Op.like]: "%"+itemName+"%" },
-            }
+            },
+            attributes:{
+                exclude: ["BusinessId"],
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
+                    ]
+                ],
+            },
+            include: [ProductImage]
         })
         successResponse(res, results)
     } catch (error) {
