@@ -249,30 +249,44 @@ const getTopRatedProducts = async(req,res)=>{
 
 const getTopSellingProducts = async(req, res) =>{
     try {
-        const response = await OrderProduct.findAll({
+        const response = await Product.findAll({
             limit: 12,
-            group: 'productId',
             attributes:{
-                exclude: ["OrderId","productId",],
+                exclude: ["BusinessId"],
                 include: [
                     [
                         Sequelize.literal(`(
                             SELECT SUM(quantity)
                             FROM OrderProducts AS order_product
                             WHERE
-                                productId = OrderProduct.ProductId
+                                productId = Product.id
                         )`),
                         'total_sell_quantity'
                     ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
+                    ]
                 ]
             },
             order: [
                 [Sequelize.literal('total_sell_quantity'), 'DESC']
             ],
-            include: {
-                model: Product,
-                include: [ProductImage]
-            }
+            include: [ProductImage]
         })
         successResponse(res, response)
     } catch (error) {
