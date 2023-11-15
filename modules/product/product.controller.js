@@ -85,6 +85,15 @@ const getProduct = async(req,res)=>{
                                 productId = Product.id
                         )`),
                         'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
                     ]
                 ],
             },
