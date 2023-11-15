@@ -7,7 +7,6 @@ const {Op} = require('sequelize');
 
 const createProduct = async(req,res)=>{
     try {
-    
         const {
             name,oldPrice,newPrice,amount,description,isFeatured
         } = req.body;
@@ -151,6 +150,7 @@ const deleteProducts = async(req,res)=>{
 const getFeaturedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
+            limit: 6,
             where:{
                 isFeatured:true
             },
@@ -211,7 +211,7 @@ const getBusinessSectorProducts = async(req,res)=>{
 const getTopRatedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
-            limit: 1,
+            limit: 6,
             attributes:{
                 exclude: ['BusinessId'],
                 include: [
@@ -249,7 +249,27 @@ const getTopRatedProducts = async(req,res)=>{
 const getTopSellingProducts = async(req, res) =>{
     try {
         const response = await OrderProduct.findAll({
-            group: 'productId' 
+            limit: 6,
+            group: 'productId',
+            attributes:{
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT SUM(quantity)
+                            FROM orderproducts AS order_product
+                            WHERE
+                                productId = orderproduct.productId
+                        )`),
+                        'total_sell_quantity'
+                    ],
+                ]
+            },
+            order: [
+                [Sequelize.literal('total_sell_quantity'), 'DESC']
+            ],
+            include: {
+                model: Product
+            }
         })
         successResponse(res, response)
     } catch (error) {
