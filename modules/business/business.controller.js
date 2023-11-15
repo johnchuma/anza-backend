@@ -54,12 +54,12 @@ const getUserBusiness = async(req,res)=>{
     const updateBusiness = async(req,res)=>{
         try {
             const uuid = req.params.uuid
-            const Business = await Business.findOne({
+            const business = await Business.findOne({
                 where:{
                     uuid
                 }
             });
-            const response = await Business.update(req.body)
+            const response = await business.update(req.body)
             successResponse(res,response)
         } catch (error) {
             errorResponse(res,error)
@@ -102,6 +102,21 @@ const getAllBusiness = async(req, res) =>{
     }
 }
 
+const getSellersApplications = async(req, res) =>{
+    try {
+        const response = await Business.findAll({
+            where:{
+                active:false
+            },
+            include: [User,BusinessSector]
+        })
+        successResponse(res, response)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
+
+
 module.exports = {
-    createBusiness,updateBusiness,getCategories,deleteBusiness,getUserBusiness,getAllBusiness
+    createBusiness,updateBusiness,getCategories,deleteBusiness,getUserBusiness,getAllBusiness,getSellersApplications
 }

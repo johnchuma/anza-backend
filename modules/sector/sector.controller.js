@@ -88,4 +88,19 @@ const getBusinessSectorProducts = async(req,res)=>{
     }
 }
 
-module.exports = {createBusinessSector, getBusinessSector, getAllBusinessSector, getBusinessSectorProducts}
+const deleteSector = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const sector = await BusinessSector.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await sector.destroy()
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+module.exports = {createBusinessSector, getBusinessSector, getAllBusinessSector, getBusinessSectorProducts, deleteSector}
