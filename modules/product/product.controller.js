@@ -156,6 +156,7 @@ const getFeaturedProducts = async(req,res)=>{
             },
             include: [ProductImage],
             attributes:{
+                exclude: ["BusinessId"],
                 include: [
                     [
                         Sequelize.literal(`(
@@ -256,9 +257,9 @@ const getTopSellingProducts = async(req, res) =>{
                     [
                         Sequelize.literal(`(
                             SELECT SUM(quantity)
-                            FROM orderproducts AS order_product
+                            FROM OrderProducts AS order_product
                             WHERE
-                                productId = orderproduct.productId
+                                productId = OrderProduct.productId
                         )`),
                         'total_sell_quantity'
                     ],
