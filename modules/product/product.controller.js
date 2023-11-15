@@ -253,13 +253,14 @@ const getTopSellingProducts = async(req, res) =>{
             limit: 12,
             group: 'productId',
             attributes:{
+                exclude: ["OrderId","productId",],
                 include: [
                     [
                         Sequelize.literal(`(
                             SELECT SUM(quantity)
                             FROM OrderProducts AS order_product
                             WHERE
-                                productId = OrderProduct.productId
+                                productId = OrderProduct.ProductId
                         )`),
                         'total_sell_quantity'
                     ],
@@ -269,7 +270,8 @@ const getTopSellingProducts = async(req, res) =>{
                 [Sequelize.literal('total_sell_quantity'), 'DESC']
             ],
             include: {
-                model: Product
+                model: Product,
+                include: [ProductImage]
             }
         })
         successResponse(res, response)
