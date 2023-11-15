@@ -57,6 +57,15 @@ const getProducts = async(req,res)=>{
                                 productId = Product.id
                         )`),
                         'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
                     ]
                 ],
             }
@@ -93,7 +102,7 @@ const getProduct = async(req,res)=>{
                             WHERE
                                 productId = Product.id
                         )`),
-                        'rating'
+                        'ratingCount'
                     ]
                 ],
             },
@@ -156,6 +165,15 @@ const getFeaturedProducts = async(req,res)=>{
                                 productId = Product.id
                         )`),
                         'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
                     ]
                 ],
             }
@@ -181,6 +199,15 @@ const getTopRatedProducts = async(req,res)=>{
                                 productId = Product.id
                         )`),
                         'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
                     ]
                 ],
             },
