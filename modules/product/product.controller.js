@@ -249,7 +249,7 @@ const getTopRatedProducts = async(req,res)=>{
 const getTopSellingProducts = async(req, res) =>{
     try {
         const response = await OrderProduct.findAll({
-            limit: 6,
+            limit: 12,
             group: 'productId',
             attributes:{
                 include: [
