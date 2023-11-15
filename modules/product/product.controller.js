@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Product,Business,Pledge,ProductImage,BusinessSector,Review, Sequelize} = require("../../models");
+const {Product,Business,Pledge,ProductImage,BusinessSector,Review, Sequelize, OrderProduct} = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
 
 const {Op} = require('sequelize');
@@ -184,6 +184,30 @@ const getFeaturedProducts = async(req,res)=>{
     }
 }
 
+const getBusinessSectorProducts = async(req,res)=>{
+    try {
+        const uuid = req.params.uuid
+        const businessSector = await BusinessSector.findOne({
+            where: {
+                uuid
+            }
+        })
+
+        const response = await Product.findAll({
+            include: [
+                ProductImage,{
+                model: Business,
+                where: {
+                    businessSectorId: businessSector.id
+                }
+            }]
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
 const getTopRatedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
@@ -222,30 +246,17 @@ const getTopRatedProducts = async(req,res)=>{
     }
 }
 
-const getBusinessSectorProducts = async(req,res)=>{
+const getTopSellingProducts = async(req, res) =>{
     try {
-        const uuid = req.params.uuid
-        const businessSector = await BusinessSector.findOne({
-            where: {
-                uuid
-            }
+        const response = await OrderProduct.findAll({
+            group: 'productId' 
         })
-
-        const response = await Product.findAll({
-            include: [
-                ProductImage,{
-                model: Business,
-                where: {
-                    businessSectorId: businessSector.id
-                }
-            }]
-        })
-        successResponse(res,response)
+        successResponse(res, response)
     } catch (error) {
-        errorResponse(res,error)
+        errorResponse(res, error)
     }
 }
 
 module.exports = {
-    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts,getTopRatedProducts
+    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts,getTopRatedProducts,getTopSellingProducts
 }
