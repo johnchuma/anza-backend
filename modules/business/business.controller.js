@@ -106,7 +106,7 @@ const getSellersApplications = async(req, res) =>{
     try {
         const response = await Business.findAll({
             where:{
-                active:false
+                status:"waiting"
             },
             include: [User,BusinessSector]
         })

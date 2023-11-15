@@ -27,10 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-     status:{
-      type:DataTypes.ENUM('open', 'closed','delivered'),
-      defaultValue:"open"
-     },
+    status:{
+     type:DataTypes.ENUM('waiting', 'canceled','delivered'),
+     defaultValue:"waiting"
+    },
   }, {
     sequelize,
     modelName: 'OrderProduct',

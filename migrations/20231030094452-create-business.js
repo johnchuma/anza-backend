@@ -32,9 +32,9 @@ module.exports = {
         type: DataTypes.STRING, 
         allowNull:true 
       },
-      active:{
-        type: DataTypes.BOOLEAN, 
-        defaultValue:false
+      status:{
+        type: DataTypes.ENUM('waiting','rejected','accepted'), 
+        defaultValue:"waiting"
       },
       createdAt: {
         allowNull: false,

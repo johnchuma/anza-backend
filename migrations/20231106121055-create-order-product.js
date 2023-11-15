@@ -25,8 +25,8 @@ module.exports = {
         defaultValue: DataTypes.UUIDV4
       },
       status:{
-       type:DataTypes.ENUM('open', 'closed','delivered'),
-       defaultValue:"open"
+       type:DataTypes.ENUM('waiting', 'canceled','delivered'),
+       defaultValue:"waiting"
       },
       createdAt: {
         allowNull: false,
