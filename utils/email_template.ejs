@@ -1,34 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- No need to include the Bootstrap CSS since we're not using it for layout -->
-  <style>
-    body {
-      background-color: antiquewhite;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    .center button {
-      padding: 10px 20px;
-      border-width: 0px;
-      border-style: hidden;
-      background-color: rgb(1, 115, 244);
-      color: white;
-      font-size: medium;
-      text-align: center;
-      margin: 0 auto; 
-    }
-  </style>
+    <title>Anza Marketplace</title>
+    <style>
+        body{
+            max-width: 900px;
+            background-color: #f8f9fa;
+        }
+        .email-content {
+            max-width: 800px;
+        }
+        .header {
+            background-color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+        .product-grid {
+            background-color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .product-card {
+            width: calc(50% - 20px);
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <br/>
- 
-  <%- message %>
-  
+    <div class="email-content">
+        <div class="header">
+            <div class="row ">
+                <img src="https://testingwebprojects.com/images/home/Shule-Yetu-%E2%80%93-52.png" alt="..." width="70px" height="30px">
+                <h2>Anza Marketplace</h2>
+            </div>
+        </div>
+        <hr style="margin-left: 10%;margin-right: 10%;">
+        <!-- <div class="product-grid"> -->
+            <div class="row">
+                <p style="padding-left:10%;padding-right:10%;">
+                    <%- message %>
+                </p>
+            </div>
+            <div class="row">
+                <p style="padding-left:10%;padding-right:10%;">
+                    Best regards,<br>
+                    Anza Marketplace
+                </p>
+            </div>
+        <!-- </div> -->
+        <hr style="margin-left: 10%;margin-right: 10%;">
+        <div class="footer">
+            <p>Thank you for shopping with us!</p>
+        </div>
+    </div>
 </body>
 </html>

@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = (email,subject,message)=>{
+const sendMail = (user,subject,message)=>{
     try {
         const templatePath = path.join(__dirname, 'email_template.ejs');
         const emailParams = {
-            from: 'Shule alumni',
-            to: email,
+            from: 'Anza marketplace',
+            to: user.email,
             subject: subject,
-            html:ejs.render(fs.readFileSync(templatePath, 'utf8'), { message:message })
+            html:ejs.render(fs.readFileSync(templatePath, 'utf8'), {user:user, subject:subject,message:message })
           };
     const response =    transporter.sendMail(emailParams)
         return response
@@ -33,7 +33,7 @@ const resetPassword = (user)=>{
   try {
       const templatePath = path.join(__dirname, 'password_reset.ejs');
       const emailParams = {
-          from: 'Shule alumni',
+          from: 'Anza marketplace',
           to: user.email,
           subject: 'Reset password',
           html:ejs.render(fs.readFileSync(templatePath, 'utf8'), { name:user.name,link:user.uuid }),
