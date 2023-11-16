@@ -47,12 +47,14 @@
                     <%- message %>
                 </p>
             </div>
-            <div class="row">
-                <p style="padding-left:10%;padding-right:10%;">
-                    Best regards,<br>
-                    Anza Marketplace
-                </p>
-            </div>
+            <% if(status != 'customer_promotion' && status != 'seller_promotion' ){%>
+                <div class="row">
+                    <p style="padding-left:10%;padding-right:10%;">
+                        Best regards,<br>
+                        Anza Marketplace
+                    </p>
+                </div>
+            <% }%>
         <!-- </div> -->
         <hr style="margin-left: 10%;margin-right: 10%;">
         <div class="footer">

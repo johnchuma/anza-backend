@@ -10,6 +10,7 @@ const ProductImageRoutes =  require("./modules/product_image/product_image.route
 const BusinessSector =  require("./modules/sector/sector.routes")
 const Review =  require("./modules/review/review.routes")
 const Favourite =  require("./modules/favourite/favourite.routes")
+const Promotion =  require("./modules/promotion/promotion.routes")
 
 
 const cors = require('cors')
@@ -28,6 +29,7 @@ app.use("/wishlist",WishlistRoutes)
 app.use("/sector",BusinessSector)
 app.use("/review",Review)
 app.use("/favourite",Favourite)
+app.use("/promotion",Promotion)
 
 app.get('/',(req,res)=>{
     res.send("Anza marketplace API's are okay!")

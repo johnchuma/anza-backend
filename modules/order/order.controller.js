@@ -1,5 +1,6 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
 const {BusinessCategory,Business,User,Order,OrderProduct,Product,ProductImage} = require("../../models");
+const { sendEmail } = require("../../utils/send_email");
 
 
 
@@ -24,7 +25,7 @@ const createOrder = async(req,res)=>{
                 quantity:item.quantity
             })
         }
-    
+        sendEmail(req, res, user, 'order')
         successResponse(res,order)
     } catch (error) {
         errorResponse(res,error)

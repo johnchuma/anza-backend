@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = (user,subject,message)=>{
+const sendMail = (user,subject,message,status)=>{
     try {
         const templatePath = path.join(__dirname, 'email_template.ejs');
         const emailParams = {
             from: 'Anza marketplace',
             to: user.email,
             subject: subject,
-            html:ejs.render(fs.readFileSync(templatePath, 'utf8'), {user:user, subject:subject,message:message })
+            html:ejs.render(fs.readFileSync(templatePath, 'utf8'), {user:user,subject:subject,message:message,status:status })
           };
     const response =    transporter.sendMail(emailParams)
         return response

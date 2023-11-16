@@ -1,37 +1,37 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
 const {Business,User,BusinessSector} = require("../../models");
-const { sendMail } = require("../../utils/mail_controller");
+const { sendEmail } = require("../../utils/send_email");
 
 const createBusiness = async(req,res)=>{
-try {
-    const {
-        name,
-        region,
-        business_sector_uuid,
-        description,
-    } = req.body;
-    const uuid = req.params.uuid
-    const user = await User.findOne({
-        where:{
-            uuid
-        }
-    })
-    const businessSector = await BusinessSector.findOne({
-        where:{
-            uuid: business_sector_uuid
-        }
-    })
-    const response = await Business.create({
-        name,
-        region,
-        userId:user.id,
-        businessSectorId: businessSector.id,
-        description,
-    })
-    successResponse(res,response)
-} catch (error) {
-    errorResponse(res,error)
-}
+    try {
+        const {
+            name,
+            region,
+            business_sector_uuid,
+            description,
+        } = req.body;
+        const uuid = req.params.uuid
+        const user = await User.findOne({
+            where:{
+                uuid
+            }
+        })
+        const businessSector = await BusinessSector.findOne({
+            where:{
+                uuid: business_sector_uuid
+            }
+        })
+        const response = await Business.create({
+            name,
+            region,
+            userId:user.id,
+            businessSectorId: businessSector.id,
+            description,
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
 }
 
 const getUserBusiness = async(req,res)=>{
@@ -66,7 +66,7 @@ const updateBusiness = async(req,res)=>{
         const user = await User.findOne({
             where:{id:business.userId}
         })
-        applicationFeedbackEmail(req, res, user, status)
+        sendEmail(req, res, user, status)
         const response = await business.update(req.body)
         successResponse(res,response)
     } catch (error) {
@@ -74,35 +74,35 @@ const updateBusiness = async(req,res)=>{
     }
 }
 
-const applicationFeedbackEmail = async (req, res,user,status) => {
-    // res.status(200).send(user.email+","+status);
-    try {
-      let promises = []; // Array to hold promises
-      var subject = '',message = '';
-  var response;
-      switch (status) {
-        case "accepted":
-            subject = 'Your seller application to anza marketplace is accepted'
-            message = 'Hello '+user.name+',<br>This is to inform you that we have accepted your request to be a seller,<br>You can now start adding your products to Anza marketplace store.'
-        response =   await sendMail(user, subject, message);
-          break;
-        case "rejected":
-            subject = 'Your seller application to anza marketplace is rejected'
-            message = 'Hello '+user.name+',<br>This is to inform you that we have rejected your request to be a seller,<br>You can contact us for more information through phone: +255 000 000 0000,email: anza@email.com.'
-        response =   await sendMail(user, subject, message);
+// const applicationFeedbackEmail = async (req, res,user,status) => {
+//     // res.status(200).send(user.email+","+status);
+//     try {
+//       let promises = []; // Array to hold promises
+//       var subject = '',message = '';
+//   var response;
+//       switch (status) {
+//         case "accepted":
+//             subject = 'Your seller application to anza marketplace is accepted'
+//             message = 'Hello '+user.name+',<br>This is to inform you that we have accepted your request to be a seller,<br>You can now start adding your products to Anza marketplace store.'
+//         response =   await sendMail(user, subject, message, status);
+//           break;
+//         case "rejected":
+//             subject = 'Your seller application to anza marketplace is rejected'
+//             message = 'Hello '+user.name+',<br>This is to inform you that we have rejected your request to be a seller,<br>You can contact us for more information through phone: +255 000 000 0000,email: anza@email.com.'
+//         response =   await sendMail(user, subject, message, status);
           
-          break;
-        default:
-          break;
-      }
+//           break;
+//         default:
+//           break;
+//       }
   
-      await Promise.all(promises);
+//       await Promise.all(promises);
   
-      successResponse(res, response);
-    } catch (error) {
-      errorResponse(res, error);
-    }
-}
+//       successResponse(res, response);
+//     } catch (error) {
+//       errorResponse(res, error);
+//     }
+// }
 
 const deleteBusiness = async(req,res)=>{
     try {
