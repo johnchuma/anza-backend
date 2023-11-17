@@ -281,6 +281,19 @@ const deleteUser = async(req,res)=>{
     }
   }
 
+  const getMyDetails = async(req,res)=>{
+    const user = req.user
+    try {
+        const response = await User.findOne({
+          where:{id:user.id},
+          include:[Business]
+        })
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+  }
+
   const getAllSellers = async(req,res)=>{
     try {
         const response = await User.findAll({
@@ -418,5 +431,6 @@ const getUserDetails = async(req,res)=>{
     pushSMS,
     getUserDetails,
     getAllUsers,
-    getAllSellers
+    getAllSellers,
+    getMyDetails
   }

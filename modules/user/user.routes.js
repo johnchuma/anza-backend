@@ -2,7 +2,8 @@ const {Router} = require("express")
 const { validateJWT } = require("../../utils/validateJWT")
 const router = Router()
 const upload = require("../../utils/upload");
-const { registerUser,  loginUser,  deleteUser, updateUser,  getHash, pushSMS,  sendPasswordLink, passwordReset, sendMessage, getAllUsers, getUserDetails, getAllSellers } = require("./user.controller");
+const { registerUser,  loginUser,  deleteUser, updateUser,  getHash, pushSMS,  sendPasswordLink, passwordReset, sendMessage, getAllUsers, getUserDetails, 
+    getAllSellers,getMyDetails } = require("./user.controller");
 
 router.post("/register", registerUser)
 router.post("/message",validateJWT,sendMessage)
@@ -16,5 +17,6 @@ router.get("/sellers",validateJWT,getAllSellers)
 // router.get("/hash",getHash)
 router.get("/:uuid",validateJWT,getUserDetails)
 router.get("/",validateJWT,getAllUsers)
+router.get("/me",validateJWT,getMyDetails)
 
 module.exports = router
