@@ -14,13 +14,13 @@ module.exports.validateJWT = async (req, res, next) => {
       if (error)
         return res
           .status(403)
-          .json({ status: false, error: "Oops! You don't have access" });
+          .json({ status: false,code:403, error: "Oops! You don't have access" });
       req.user = user;
       next();
     });
   } else {
     return res
       .status(403)
-      .json({ status: false, error: "Oops! You don't have access" });
+      .json({ status: false,code:403, error: "Oops! You don't have access" });
   }
 };
