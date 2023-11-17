@@ -9,10 +9,8 @@ const createOrder = async(req,res)=>{
         const {
             products
         } = req.body;
-        const uuid = req.params.uuid;
-        const user = await User.findOne({
-            uuid
-        })
+        
+        const user = req.user
         const order = await Order.create({
             userId:user.id
         })
@@ -35,12 +33,7 @@ const createOrder = async(req,res)=>{
 
 const getCustomerOrders = async(req,res)=>{
     try {
-        const uuid = req.params.uuid
-        const user = await User.findOne({
-            where:{
-                uuid
-            }
-        });
+        const user = req.user
         const response = await Order.findAll({
             order:[['createdAt', 'DESC']],
             where:{

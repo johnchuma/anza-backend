@@ -252,10 +252,10 @@ const deleteUser = async(req,res)=>{
             },
             include:[Business]
           });
-          
+          const tokens = generateJwtTokens(response)
             res.status(200).json({
               status: true,
-              response
+              tokens
             });
           
          

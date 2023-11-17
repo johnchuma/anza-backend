@@ -27,7 +27,6 @@ const createProduct = async(req,res)=>{
 
 const updateProduct = async(req,res)=>{
     try {
-       
         const uuid = req.params.uuid
         const product = await Product.findOne({
             where:{
@@ -39,14 +38,22 @@ const updateProduct = async(req,res)=>{
     } catch (error) {
         errorResponse(res,error)
     }
-    }
+}
     
 const getProducts = async(req,res)=>{
     try {
-    
-        const response = await Product.findAll({
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+        
+        // const response = await Product.findAll({
+        const {count, rows} = await Product.findAndCountAll({
+            offset: offset, //ruka ngapi
+            limit: limit, //leta ngapi
             include:[ProductImage],
             attributes:{
+                exclude:["BusinessId"],
                 include: [
                     [
                         Sequelize.literal(`(
@@ -69,11 +76,12 @@ const getProducts = async(req,res)=>{
                 ],
             }
         })
-        successResponse(res,response)
+        successResponse(res,{count, data:rows, page})
     } catch (error) {
         errorResponse(res,error)
     }
 }
+
 const getProduct = async(req,res)=>{
     try {
         const uuid = req.params.uuid
@@ -114,34 +122,21 @@ const getProduct = async(req,res)=>{
         errorResponse(res,error)
     }
 }
-const BusinessProductCount = async(req,res)=>{
+
+const BusinessProducts = async(req,res)=>{
     try {
          const uuid = req.params.uuid
-         const Business = await Business.findOne({
+         const business = await Business.findOne({
             where:{
                 uuid
             }
          })
-         const count = await Product.count({
+         const count = await Product.findAll({
             where:{
-                BusinessId:Business.id
+                BusinessId:business.id
             }
          })
          successResponse(res,count)
-    } catch (error) {
-        errorResponse(res,error)
-    }
-}
-const deleteProducts = async(req,res)=>{
-    try {
-        const uuid = req.params.uuid
-        const event = await Product.findOne({
-            where:{
-                uuid
-            }
-        });
-        const response = await event.destroy()
-        successResponse(res,response)
     } catch (error) {
         errorResponse(res,error)
     }
@@ -150,7 +145,7 @@ const deleteProducts = async(req,res)=>{
 const getFeaturedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
-            limit: 6,
+            limit: 8,
             where:{
                 isFeatured:true
             },
@@ -212,7 +207,7 @@ const getBusinessSectorProducts = async(req,res)=>{
 const getTopRatedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
-            limit: 6,
+            limit: 8,
             attributes:{
                 exclude: ['BusinessId'],
                 include: [
@@ -296,8 +291,15 @@ const getTopSellingProducts = async(req, res) =>{
 
 const searchProduct = async(req, res) => {
     try {
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+        
         const {itemName} = req.params
-        const results = await Product.findAll({
+        const {count, rows} = await Product.findAndCountAll({
+            offset: offset, //ruka ngapi
+            limit: limit, //leta ngapi
             where:{
                 name: { [Op.like]: "%"+itemName+"%" },
             },
@@ -326,11 +328,12 @@ const searchProduct = async(req, res) => {
             },
             include: [ProductImage]
         })
-        successResponse(res, results)
+        successResponse(res, {count, data:rows, page})
     } catch (error) {
         errorResponse(res, error)
     }
 }
+
 const getSearchedProduct = async(req, res) => {
     try {
         const {uuid} = req.body
@@ -345,6 +348,22 @@ const getSearchedProduct = async(req, res) => {
     }
 }
 
+const deleteProduct = async(req, res) => {
+    try {
+        const uuid = req.params.uuid
+        const product = await Product.findOne({
+            where:{
+                uuid
+            }
+        });
+        const response = await product.destroy()
+        successResponse(res,response)
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
 module.exports = {
-    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts,getTopRatedProducts,getTopSellingProducts,searchProduct,getSearchedProduct
+    createProduct,updateProduct,getProduct,getProducts,getFeaturedProducts,getBusinessSectorProducts,
+    getTopRatedProducts,getTopSellingProducts,searchProduct,getSearchedProduct,deleteProduct,BusinessProducts
 }

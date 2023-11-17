@@ -13,11 +13,7 @@ const createFavourite = async(req,res)=>{
                 uuid:product_uuid
             }
         });
-        const user = await User.findOne({
-            where:{
-                uuid:uuid
-            }
-        }); 
+        const user = req.user 
         const response = await Favourite.create({
             userId:user.id,productId:product.id
         })

@@ -1,12 +1,13 @@
 const {Router} = require('express')
+const { validateJWT } = require("../../utils/validateJWT")
 const { createBusiness, getCategories, updateBusiness, deleteBusiness, getUserBusiness, getAllBusiness, getSellersApplications } = require('./business.controller');
 
 const router = Router()
-router.post("/:uuid",createBusiness)
-router.get('/user/:uuid',getUserBusiness)
-router.get('/',getAllBusiness)
-router.get('/applications',getSellersApplications)
-router.patch('/:uuid',updateBusiness)
-router.delete('/:uuid',deleteBusiness)
+router.post("/",validateJWT,createBusiness)
+router.get('/user/:uuid',validateJWT,getUserBusiness)
+router.get('/',validateJWT,getAllBusiness)
+router.get('/applications',validateJWT,getSellersApplications)
+router.patch('/:uuid',validateJWT,updateBusiness)
+router.delete('/:uuid',validateJWT,deleteBusiness)
 
 module.exports = router

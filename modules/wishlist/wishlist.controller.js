@@ -2,30 +2,30 @@ const { errorResponse, successResponse } = require("../../utils/responses")
 const {User,Wishlist,Product,ProductImage} = require("../../models");
 
 const createWishlist = async(req,res)=>{
-try {
-    const {
-        user_uuid
-    } = req.body;
-    const uuid = req.params.uuid;
-    const user = await User.findOne({
-        where:{
-            uuid: user_uuid
-        }
-    })
-    const product = await Product.findOne({
-        where:{
-            uuid
-        }
-    })
-    const wishlist = await Wishlist.create({
-        userId:user.id,
-        productId:product.id
-    })
-    
-    successResponse(res,wishlist)
-} catch (error) {
-    errorResponse(res,error)
-}
+    try {
+        const {
+            user_uuid
+        } = req.body;
+        const uuid = req.params.uuid;
+        const user = await User.findOne({
+            where:{
+                uuid: user_uuid
+            }
+        })
+        const product = await Product.findOne({
+            where:{
+                uuid
+            }
+        })
+        const wishlist = await Wishlist.create({
+            userId:user.id,
+            productId:product.id
+        })
+        
+        successResponse(res,wishlist)
+    } catch (error) {
+        errorResponse(res,error)
+    }
 }
 
 
@@ -74,12 +74,7 @@ try {
 
     const myWishlist = async(req,res)=>{
         try {
-            const uuid = req.params.uuid
-            const user = await User.findOne({
-                where:{
-                    uuid
-                }
-            });
+            const user = req.user
             const response = await Wishlist.findAll({
                 where:{
                     userId: user.id,

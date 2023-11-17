@@ -4,9 +4,8 @@ const { sendMail } = require("../utils/mail_controller");
 const sendEmail = async (req, res,user,status) => {
     // res.status(200).send(user.email+","+status);
     try {
-      let promises = []; // Array to hold promises
       var subject = '',message = '';
-  var response;
+      var response;
       switch (status) {
         case "accepted":
             subject = 'Your seller application to Anza Marketplace is accepted'
@@ -35,10 +34,7 @@ const sendEmail = async (req, res,user,status) => {
           break;
         default:
           break;
-      }
-  
-      await Promise.all(promises);
-  
+      }  
       successResponse(res, response);
     } catch (error) {
       errorResponse(res, error);

@@ -1,10 +1,11 @@
 const {Router} = require('express')
+const { validateJWT } = require("../../utils/validateJWT")
 const { createWishlist, deleteWishlist, isInWishlist, myWishlist } = require('./wishlist.controller')
 
 const router = Router()
-router.post("/:uuid",createWishlist)
-router.delete('/:uuid',deleteWishlist)
-router.post('/product/:uuid',isInWishlist)//pass product uuid
-router.get('/user/:uuid',myWishlist)//pass user uuid
+router.post("/:uuid",validateJWT,createWishlist)
+router.delete('/:uuid',validateJWT,deleteWishlist)
+router.post('/product/:uuid',validateJWT,isInWishlist)//pass product uuid
+router.get('/user',validateJWT,myWishlist)//pass user uuid
 
 module.exports = router

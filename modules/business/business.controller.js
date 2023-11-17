@@ -10,12 +10,8 @@ const createBusiness = async(req,res)=>{
             business_sector_uuid,
             description,
         } = req.body;
-        const uuid = req.params.uuid
-        const user = await User.findOne({
-            where:{
-                uuid
-            }
-        })
+        
+        const user = req.user
         const businessSector = await BusinessSector.findOne({
             where:{
                 uuid: business_sector_uuid
