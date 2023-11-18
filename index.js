@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("files"));
 app.use(bodyParser.text({ type: "/" }));
-// app.use("/user",UserRoutes)
+app.use("/user",UserRoutes)
 app.use("/business",BusinessRoutes)
 app.use("/product-image",ProductImageRoutes)
 app.use("/product",ProductRoutes)
