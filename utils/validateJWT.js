@@ -9,6 +9,7 @@ module.exports.validateJWT = async (req, res, next) => {
   if (headers) {
     const tokens = headers.split(" ")[1];
 
+    
     if (tokens == null) return res.status(401);
     jwt.verify(tokens, process.env.ACCESS_TOKEN, (error, user) => {
       if (error)
