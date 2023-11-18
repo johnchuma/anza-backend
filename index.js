@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require("body-parser");
-const UserRoutes =  require("./modules/user/user.routes")
+// const UserRoutes =  require("./modules/user/user.routes")
 const BusinessRoutes =  require("./modules/business/business.routes")
 const CategoryRoutes =  require("./modules/category/category.routes")
 const ProductRoutes =  require("./modules/product/product.routes")
