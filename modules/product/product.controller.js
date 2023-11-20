@@ -182,6 +182,11 @@ const getFeaturedProducts = async(req,res)=>{
 
 const getBusinessSectorProducts = async(req,res)=>{
     try {
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+        
         const uuid = req.params.uuid
         const businessSector = await BusinessSector.findOne({
             where: {
@@ -189,7 +194,9 @@ const getBusinessSectorProducts = async(req,res)=>{
             }
         })
 
-        const response = await Product.findAll({
+        const {count, rows} = await Product.findAndCountAll({
+            offset: offset, //ruka ngapi
+            limit: limit, //leta ngapi
             include: [
                 ProductImage,{
                 model: Business,
@@ -198,7 +205,7 @@ const getBusinessSectorProducts = async(req,res)=>{
                 }
             }]
         })
-        successResponse(res,response)
+        successResponse(res,{count, data:rows, page})
     } catch (error) {
         errorResponse(res,error)
     }
