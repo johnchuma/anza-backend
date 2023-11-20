@@ -4,9 +4,9 @@ const { createBusinessSector, getBusinessSector, getAllBusinessSector, getBusine
 
 const router = Router()
 router.post("/",validateJWT,createBusinessSector) 
-router.get("/:uuid",validateJWT,getBusinessSector) 
-router.get("/",validateJWT,getAllBusinessSector)
-router.get("/business/products/:uuid",validateJWT,getBusinessSectorProducts)
+router.get("/:uuid",getBusinessSector) 
+router.get("/",getAllBusinessSector)
+router.get("/business/products/:uuid",getBusinessSectorProducts)
 router.delete('/:uuid',validateJWT,deleteSector)
 
 module.exports = router
