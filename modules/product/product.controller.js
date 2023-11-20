@@ -197,9 +197,11 @@ const getBusinessSectorProducts = async(req,res)=>{
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
+            attributes:{exclude:['BusinessId']},
             include: [
                 ProductImage,{
                 model: Business,
+                attributes:{exclude:['UserId','BusinessSectorId']},
                 where: {
                     businessSectorId: businessSector.id
                 }
@@ -335,6 +337,7 @@ const searchProduct = async(req, res) => {
             },
             include: [ProductImage]
         })
+        // totalPages = 
         successResponse(res, {count, data:rows, page})
     } catch (error) {
         errorResponse(res, error)
