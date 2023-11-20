@@ -76,7 +76,8 @@ const getProducts = async(req,res)=>{
                 ],
             }
         })
-        successResponse(res,{count, data:rows, page})
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res, {count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res,error)
     }
@@ -207,7 +208,8 @@ const getBusinessSectorProducts = async(req,res)=>{
                 }
             }]
         })
-        successResponse(res,{count, data:rows, page})
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res, {count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res,error)
     }
@@ -337,8 +339,8 @@ const searchProduct = async(req, res) => {
             },
             include: [ProductImage]
         })
-        // totalPages = 
-        successResponse(res, {count, data:rows, page})
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res, {count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res, error)
     }
