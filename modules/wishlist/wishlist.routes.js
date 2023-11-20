@@ -6,6 +6,6 @@ const router = Router()
 router.post("/:uuid",validateJWT,createWishlist)
 router.delete('/:uuid',validateJWT,deleteWishlist)
 router.get('/product/:uuid',validateJWT,isInWishlist)//pass product uuid
-router.get('/user',validateJWT,myWishlist)//pass user uuid
+router.get('/',validateJWT,myWishlist)//pass user uuid
 
 module.exports = router
