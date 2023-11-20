@@ -5,7 +5,7 @@ const { createOrder, deleteOrderProduct, deleteOrder, getSpecificBusinessOrders,
 const router = Router()
 router.post("/:uuid",validateJWT,createOrder)
 router.get("/business/:uuid",validateJWT,getSpecificBusinessOrders)
-router.get("/user/:uuid",validateJWT,getCustomerOrders)
+router.get("/",validateJWT,getCustomerOrders)
 router.delete('/orderProduct/:uuid',validateJWT,deleteOrderProduct)
 router.delete('/:uuid',validateJWT,deleteOrder)
 router.patch("/:uuid",validateJWT,updateOrderProduct)
