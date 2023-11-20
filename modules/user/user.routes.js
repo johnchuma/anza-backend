@@ -15,8 +15,8 @@ router.delete("/:uuid",validateJWT,deleteUser)
 router.post("/login",loginUser)
 router.get("/sellers",validateJWT,getAllSellers)
 // router.get("/hash",getHash)
+router.get("/me",validateJWT,getMyDetails)
 router.get("/:uuid",validateJWT,getUserDetails)
 router.get("/",validateJWT,getAllUsers)
-router.get("/me",validateJWT,getMyDetails)
 
 module.exports = router
