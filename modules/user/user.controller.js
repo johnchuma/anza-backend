@@ -1,4 +1,4 @@
-const { User,Business } = require("../../models");
+const { User,Business,Product } = require("../../models");
 const getUrl = require("../../utils/cloudinary_upload");
 
 const { generateJwtTokens } = require("../../utils/generateJwtTokens");
@@ -361,7 +361,16 @@ const loginUser = async (req, res) => {
             role: "admin"
           }
         })
-        successResponse(res,{customers:customers, sellers:sellers, admins:admins})
+        const revenue = await Payment.count('amount')
+
+        const products = await Product.count({})
+
+        const applications = await Business.count({
+          where:{
+            status:"waiting"
+          }
+        })
+        successResponse(res,{customers:customers, sellers:sellers, admins:admins, revenue: revenue, products:products, applications:applications  })
     } catch (error) {
         errorResponse(res,error)
     }
