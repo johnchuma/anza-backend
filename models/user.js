@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasOne(models.Business);
-      User.hasMany(models.Order);
-      User.hasMany(models.Favourite);
-      User.hasMany(models.Wishlist);
+      User.hasOne(models.Business, { onDelete: 'cascade'});
+      User.hasMany(models.Order, { onDelete: 'cascade'});
+      User.hasMany(models.Favourite, { onDelete: 'cascade'});
+      User.hasMany(models.Wishlist, { onDelete: 'cascade'});
     }
   }
   

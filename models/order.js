@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Order.hasMany(models.OrderProduct)
+      Order.hasMany(models.OrderProduct, { onDelete: 'cascade'})
       Order.belongsTo(models.User);
 
       // define association here

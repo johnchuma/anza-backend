@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Product.hasMany(models.ProductImage)
-      Product.hasMany(models.Favourite)
-      Product.hasMany(models.Review)
-      Product.hasMany(models.Wishlist)
+      Product.hasMany(models.ProductImage, { onDelete: 'cascade'})
+      Product.hasMany(models.Favourite, { onDelete: 'cascade'})
+      Product.hasMany(models.Review, { onDelete: 'cascade'})
+      Product.hasMany(models.Wishlist, { onDelete: 'cascade'})
       Product.belongsTo(models.Business)
       // Product.belongsTo(models.OrderProduct)
       // Product.hasMany(models.OrderProduct)
@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull:false  
     },
-    oldPrice: {
+    buyingPrice: {
       type: DataTypes.DOUBLE,
       allowNull:true  
     },
-    newPrice: {
+    sellingPrice: {
       type: DataTypes.DOUBLE,
       allowNull:false  
     },

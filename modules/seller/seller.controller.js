@@ -38,10 +38,10 @@ const {Op} = require("sequelize");
         // PROFIT
         const business = await Business.findOne({
             where:{
-                userId:user.id
+                userId:1//user.id
             }
         })
-        res.send(business)
+        // res.send(business)
         const profit = await OrderProduct.findAll({
             include:{
                 model:Product,

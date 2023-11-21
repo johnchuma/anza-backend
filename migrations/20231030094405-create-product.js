@@ -24,11 +24,11 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull:false  
       },
-      oldPrice: {
+      buyingPrice: {
         type: DataTypes.DOUBLE,
         allowNull:true  
       },
-      newPrice: {
+      sellingPrice: {
         type: DataTypes.DOUBLE,
         allowNull:false  
       },

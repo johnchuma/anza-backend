@@ -17,8 +17,16 @@ module.exports = {
         type:DataTypes.INTEGER,
         allowNull:false
       },
+      userId: {
+        type:DataTypes.INTEGER,
+        allowNull:false
+      },
       agent: {
         type:DataTypes.STRING,
+        allowNull:false
+      },
+      amount: {
+        type:DataTypes.INTEGER,
         allowNull:false
       },
       createdAt: {
