@@ -175,9 +175,7 @@ const registerUser = async (req, res) => {
       });
       console.log(error);
     }
-  };
-
-
+};
 
 const updateUser = async (req, res) => {
   try {
@@ -218,8 +216,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-
-
 const deleteUser = async(req,res)=>{
     try {     
         const uuid = req.params.uuid
@@ -235,41 +231,41 @@ const deleteUser = async(req,res)=>{
     }
 }
 
-  const loginUser = async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        res.status(404).json({
-          status: false,
-          message: "User does not exist"
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      res.status(404).json({
+        status: false,
+        message: "User does not exist"
+      });
+    } else {
+      if (await bcrypt.compare(password, user.password)) {
+        const response = await User.findOne({
+          where: {
+            email: email
+          },
+          include:[Business]
         });
+        const tokens = generateJwtTokens(response)
+          res.status(200).json({
+            status: true,
+            tokens
+          });
+        
+        
       } else {
-        if (await bcrypt.compare(password, user.password)) {
-          const response = await User.findOne({
-            where: {
-              email: email
-            },
-            include:[Business]
-          });
-          const tokens = generateJwtTokens(response)
-            res.status(200).json({
-              status: true,
-              tokens
-            });
-          
-         
-        } else {
-          res.status(403).json({
-            status: false,
-            message: "Wrong password"
-          });
-        }
+        res.status(403).json({
+          status: false,
+          message: "Wrong password"
+        });
       }
-    } catch (error) {
-      internalError();
     }
-  };
+  } catch (error) {
+    internalError();
+  }
+};
 
   const getAllUsers = async(req,res)=>{
     try {
@@ -281,14 +277,24 @@ const deleteUser = async(req,res)=>{
     }
   }
 
-  const getMyDetails = async(req,res)=>{
-    const user = req.user
+
+  const getAllCustomers = async(req,res)=>{
     try {
-        const response = await User.findOne({
-          where:{id:user.id},
-          include:[Business]
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+
+        const {count, rows} = await User.findAndCountAll({
+          offset: offset, //ruka ngapi
+          limit: limit, //leta ngapi
+          include:[Business,],
+          where:{
+            role: "customer"
+          }
         })
-        successResponse(res,response)
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res,{count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res,error)
     }
@@ -296,18 +302,60 @@ const deleteUser = async(req,res)=>{
 
   const getAllSellers = async(req,res)=>{
     try {
-        const response = await User.findAll({
-          include:[Business],
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+
+        const {count, rows} = await User.findAndCountAll({
+          offset: offset, //ruka ngapi
+          limit: limit, //leta ngapi
+          include:[Business,],
           where:{
             role: "seller"
           }
         })
-        successResponse(res,response)
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res,{count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res,error)
     }
   }
 
+  const getAllAdmins = async(req,res)=>{
+    try {
+        let {page,limit} = req.query
+        page = parseInt(page)
+        limit = parseInt(limit)
+        const offset = (page-1)*limit
+
+        const {count, rows} = await User.findAndCountAll({
+          offset: offset, //ruka ngapi
+          limit: limit, //leta ngapi
+          include:[Business,],
+          where:{
+            role: "admin"
+          }
+        })
+        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+        successResponse(res,{count, data:rows, page, totalPages})
+    } catch (error) {
+        errorResponse(res,error)
+    }
+  }
+
+const getMyDetails = async(req,res)=>{
+  const user = req.user
+  try {
+      const response = await User.findOne({
+        where:{id:user.id},
+        include:[Business]
+      })
+      successResponse(res,response)
+  } catch (error) {
+      errorResponse(res,error)
+  }
+}
 const getUserDetails = async(req,res)=>{
     try {
         const uuid = req.params.uuid
@@ -431,6 +479,8 @@ const getUserDetails = async(req,res)=>{
     pushSMS,
     getUserDetails,
     getAllUsers,
+    getAllCustomers,
     getAllSellers,
+    getAllAdmins,
     getMyDetails
   }

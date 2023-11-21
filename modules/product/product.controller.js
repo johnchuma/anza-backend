@@ -132,12 +132,45 @@ const BusinessProducts = async(req,res)=>{
                 uuid
             }
          })
-         const count = await Product.findAll({
+         let {page,limit} = req.query
+         page = parseInt(page)
+         limit = parseInt(limit)
+         const offset = (page-1)*limit
+         
+         // const response = await Product.findAll({
+         const {count, rows} = await Product.findAndCountAll({
+            offset: offset, //ruka ngapi
+            limit: limit, //leta ngapi
+            include:[ProductImage],
             where:{
                 BusinessId:business.id
+            },
+            attributes:{
+                exclude:["BusinessId"],
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
+                    ]
+                ],
             }
          })
-         successResponse(res,count)
+         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+         successResponse(res, {count, data:rows, page, totalPages})
     } catch (error) {
         errorResponse(res,error)
     }
