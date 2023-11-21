@@ -51,7 +51,10 @@ const getProducts = async(req,res)=>{
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
-            include:[ProductImage],
+            include:{
+                model:ProductImage,
+                required: true
+            },
             attributes:{
                 exclude:["BusinessId"],
                 include: [
@@ -141,7 +144,10 @@ const BusinessProducts = async(req,res)=>{
          const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
-            include:[ProductImage],
+            include:{
+                model:ProductImage,
+                required: true
+            },
             where:{
                 BusinessId:business.id
             },
@@ -183,7 +189,10 @@ const getFeaturedProducts = async(req,res)=>{
             where:{
                 isFeatured:true
             },
-            include: [ProductImage],
+            include: {
+                model:ProductImage,
+                required: true
+            },
             attributes:{
                 exclude: ["BusinessId"],
                 include: [
@@ -278,7 +287,10 @@ const getTopRatedProducts = async(req,res)=>{
             order: [
                 [Sequelize.literal('rating'), 'DESC']
             ],
-            include: [ProductImage]
+            include: {
+                model:ProductImage,
+                required: true
+            }
         });
         successResponse(res,product)
     } catch (error) {
@@ -325,7 +337,10 @@ const getTopSellingProducts = async(req, res) =>{
             order: [
                 [Sequelize.literal('total_sell_quantity'), 'DESC']
             ],
-            include: [ProductImage]
+            include: {
+                model:ProductImage,
+                required: true
+            }
         })
         successResponse(res, response)
     } catch (error) {
@@ -370,7 +385,10 @@ const searchProduct = async(req, res) => {
                     ]
                 ],
             },
-            include: [ProductImage]
+            include: {
+                model:ProductImage,
+                required: true
+            }
         })
         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
         successResponse(res, {count, data:rows, page, totalPages})
