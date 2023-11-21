@@ -3,15 +3,9 @@ const {User,Wishlist,Product,ProductImage} = require("../../models");
 
 const createWishlist = async(req,res)=>{
     try {
-        const {
-            user_uuid
-        } = req.body;
+       
         const uuid = req.params.uuid;
-        const user = await User.findOne({
-            where:{
-                uuid: user_uuid
-            }
-        })
+        const user = req.user;
         const product = await Product.findOne({
             where:{
                 uuid
@@ -49,12 +43,7 @@ const createWishlist = async(req,res)=>{
     const isInWishlist = async(req,res)=>{
         try {
             const uuid = req.params.uuid
-            const {user_uuid} = req.body
-            const user = await User.findOne({
-                where:{
-                    uuid: user_uuid
-                }
-            });
+            const user = req.user
             const product = await Product.findOne({
                 where:{
                     uuid
