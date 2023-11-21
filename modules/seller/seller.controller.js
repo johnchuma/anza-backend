@@ -1,4 +1,4 @@
-const { User,Business,Product,Payment,Order } = require("../../models");
+const { User,Business,Product,OrderProduct,Payment,Order, Sequelize } = require("../../models");
 
 const { successResponse, errorResponse } = require("../../utils/responses");
 const {Op} = require("sequelize");
@@ -7,13 +7,79 @@ const {Op} = require("sequelize");
   const getCounts = async(req,res)=>{
     const user = req.user
     try {
-        const pending = await Order.count({
+        const pending = await OrderProduct.count({
+            include:{
+                model:Product,
+                include:{
+                    model:Business,
+                    where:{
+                        userId:user.id
+                    }
+                }
+            },
           where:{
-            role: "customer"
+            status: "pending"
+          }
+        })
+        const complete = await OrderProduct.count({
+            include:{
+                model:Product,
+                include:{
+                    model:Business,
+                    where:{
+                        userId:user.id
+                    }
+                }
+            },
+          where:{
+            status: "delivered"
           }
         })
         
-        const profit = await Payment.sum('amount')
+        const profit = await OrderProduct.count({
+            include:{
+                model:Product,
+                include:{
+                    model:Business,
+                    where:{
+                        userId:user.id
+                    }
+                }
+            },
+            attributes:{
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Product AS product
+                            WHERE
+                                id = OrderProduct.productId
+                        )`),
+                        'buyingPrice'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Product AS product
+                            WHERE
+                                id = OrderProduct.productId
+                        )`),
+                        'sellingPrice'
+                    ]
+                ],
+            }
+        })
+        const sales = await OrderProduct.count({
+            include:{
+                model:Product,
+                include:{
+                    model:Business,
+                    where:{
+                        userId:user.id
+                    }
+                }
+            },
+        })
 
         const products = await Product.count({
             include:{
@@ -46,7 +112,7 @@ const {Op} = require("sequelize");
             }
         })
 
-        successResponse(res,{pending:pending, profit: profit, products:products, in_stock:in_stock, out_stock:out_stock  })
+        successResponse(res,{pending:pending, complete:complete, profit: profit, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock  })
     } catch (error) {
         errorResponse(res,error)
     }
