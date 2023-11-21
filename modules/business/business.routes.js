@@ -4,7 +4,7 @@ const { createBusiness, getCategories, updateBusiness, deleteBusiness, getUserBu
 
 const router = Router()
 router.post("/",validateJWT,createBusiness)
-router.get('/user/:uuid',validateJWT,getUserBusiness)
+router.get('/user',validateJWT,getUserBusiness)
 router.get('/',validateJWT,getAllBusiness)
 router.get('/applications',validateJWT,getSellersApplications)
 router.patch('/:uuid',validateJWT,updateBusiness)

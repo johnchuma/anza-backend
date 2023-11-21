@@ -18,7 +18,7 @@ const {Op} = require("sequelize");
                 }
             },
           where:{
-            status: "pending"
+            status: "waiting"
           }
         })
         const complete = await OrderProduct.count({
@@ -38,10 +38,9 @@ const {Op} = require("sequelize");
         // PROFIT
         const business = await Business.findOne({
             where:{
-                userId:1//user.id
+                userId:user.id
             }
         })
-        // res.send(business)
         const profit = await OrderProduct.findAll({
             include:{
                 model:Product,
@@ -49,28 +48,28 @@ const {Op} = require("sequelize");
                     businessId:business.id,
                 }
             },
-            // attributes:{
-            //     include: [
-            //         [
-            //             Sequelize.literal(`(
-            //                 SELECT AVG(rate)
-            //                 FROM Product AS product
-            //                 WHERE
-            //                     id = OrderProduct.productId
-            //             )`),
-            //             'buyingPrice'
-            //         ],
-            //         [
-            //             Sequelize.literal(`(
-            //                 SELECT count(*)
-            //                 FROM Product AS product
-            //                 WHERE
-            //                     id = OrderProduct.productId
-            //             )`),
-            //             'sellingPrice'
-            //         ]
-            //     ],
-            // }
+            attributes:{
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT buyingPrice
+                            FROM Products AS product
+                            WHERE
+                                id = OrderProduct.productId
+                        )`),
+                        'buyingPrice'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT sellingPrice
+                            FROM Products AS product
+                            WHERE
+                                id = OrderProduct.productId
+                        )`),
+                        'sellingPrice'
+                    ]
+                ],
+            },
         })
         // END PROFIT
         const sales = await OrderProduct.count({

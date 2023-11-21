@@ -32,12 +32,7 @@ const createBusiness = async(req,res)=>{
 
 const getUserBusiness = async(req,res)=>{
     try {
-        const uuid = req.params.uuid
-        const user = await User.findOne({
-            where:{
-                uuid
-            }
-        });
+        const user = req.user
         const response = await Business.findOne({
             where:{
                 userId:user.id

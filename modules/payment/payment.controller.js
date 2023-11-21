@@ -3,9 +3,10 @@ const {Payment, Order, Product} = require("../../models");
 
 
 const createPayment = async(req,res)=>{
+    user = req.user
     try {
         const {
-            order_uuid,agent
+            order_uuid,amount,agent
         } = req.body;
         const order = await Order.findOne({
             where:{
@@ -13,9 +14,10 @@ const createPayment = async(req,res)=>{
             }
         })
         const response = await Payment.create({
-            // orderId:order.id,
+            userId:user.id,
             orderId:order_uuid,
-            agent
+            amount,
+            agent,
         })
         successResponse(res,response)
     } catch (error) {
