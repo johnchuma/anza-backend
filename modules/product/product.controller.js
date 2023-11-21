@@ -8,7 +8,7 @@ const {Op} = require('sequelize');
 const createProduct = async(req,res)=>{
     try {
         const {
-            name,oldPrice,newPrice,amount,description,isFeatured
+            name,buyingPrice,sellingPrice,amount,description,isFeatured
         } = req.body;
         const uuid = req.params.uuid
         const business = await Business.findOne({
