@@ -1,121 +1,57 @@
-const { User,Business,Product } = require("../../models");
+const { User,Business,Product,Payment,Order } = require("../../models");
 
 const { successResponse, errorResponse } = require("../../utils/responses");
 const {Op} = require("sequelize");
 
 
-  const getAllUsers = async(req,res)=>{
+  const getCounts = async(req,res)=>{
+    const user = req.user
     try {
-        const response = await User.findAll({
-        })
-        successResponse(res,response)
-    } catch (error) {
-        errorResponse(res,error)
-    }
-  }
-
-  const getAllCustomers = async(req,res)=>{
-    try {
-        let {page,limit} = req.query
-        page = parseInt(page)
-        limit = parseInt(limit)
-        const offset = (page-1)*limit
-
-        const {count, rows} = await User.findAndCountAll({
-          offset: offset, //ruka ngapi
-          limit: limit, //leta ngapi
-          include:[Business,],
+        const pending = await Order.count({
           where:{
             role: "customer"
           }
         })
-        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
-        successResponse(res,{count, data:rows, page, totalPages})
-    } catch (error) {
-        errorResponse(res,error)
-    }
-  }
+        
+        const profit = await Payment.sum('amount')
 
-  const getAllSellers = async(req,res)=>{
-    try {
-        let {page,limit} = req.query
-        page = parseInt(page)
-        limit = parseInt(limit)
-        const offset = (page-1)*limit
-
-        const {count, rows} = await User.findAndCountAll({
-          offset: offset, //ruka ngapi
-          limit: limit, //leta ngapi
-          include:[Business,],
-          where:{
-            role: "seller"
-          }
+        const products = await Product.count({
+            include:{
+                model:Business,
+                where:{
+                    userId:user.id,
+                }
+            }
         })
-        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
-        successResponse(res,{count, data:rows, page, totalPages})
-    } catch (error) {
-        errorResponse(res,error)
-    }
-  }
-
-  const getAllAdmins = async(req,res)=>{
-    try {
-        let {page,limit} = req.query
-        page = parseInt(page)
-        limit = parseInt(limit)
-        const offset = (page-1)*limit
-
-        const {count, rows} = await User.findAndCountAll({
-          offset: offset, //ruka ngapi
-          limit: limit, //leta ngapi
-          include:[Business,],
-          where:{
-            role: "admin"
-          }
+        const in_stock = await Product.count({
+            include:{
+                model:Business,
+                where:{
+                    userId:user.id,
+                }
+            },
+            where:{
+                amount:{[Op.gt]:0},
+            }
         })
-        const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
-        successResponse(res,{count, data:rows, page, totalPages})
-    } catch (error) {
-        errorResponse(res,error)
-    }
-  }
+        const out_stock = await Product.count({
+            include:{
+                model:Business,
+                where:{
+                    userId:user.id,
+                }
+            },
+            where:{
+                amount:{[Op.lte]:0},
+            }
+        })
 
-  const getUserCounts = async(req,res)=>{
-    try {
-        const customers = await User.count({
-          where:{
-            role: "customer"
-          }
-        })
-        const sellers = await User.count({
-          where:{
-            role: "seller"
-          }
-        })
-        const admins = await User.count({
-          where:{
-            role: "admin"
-          }
-        })
-        const revenue = await Payment.count('amount')
-
-        const products = await Product.count({})
-
-        const applications = await Business.count({
-          where:{
-            status:"waiting"
-          }
-        })
-        successResponse(res,{customers:customers, sellers:sellers, admins:admins, revenue: revenue, products:products, applications:applications  })
+        successResponse(res,{pending:pending, profit: profit, products:products, in_stock:in_stock, out_stock:out_stock  })
     } catch (error) {
         errorResponse(res,error)
     }
   }
 
   module.exports = {
-    getAllUsers,
-    getAllCustomers,
-    getAllSellers,
-    getAllAdmins,
-    getUserCounts
+    getCounts,
   }

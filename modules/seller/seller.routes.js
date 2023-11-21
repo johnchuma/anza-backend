@@ -2,12 +2,8 @@ const {Router} = require("express")
 const { validateJWT } = require("../../utils/validateJWT")
 const router = Router()
 const upload = require("../../utils/upload");
-const {getAllUsers,getAllCustomers,getAllSellers,getAllAdmins,getUserCounts } = require("./seller.controller");
+const {getCounts } = require("./seller.controller");
 
-router.get("/customers",validateJWT,getAllCustomers)
-router.get("/sellers",validateJWT,getAllSellers)
-router.get("/admins",validateJWT,getAllAdmins)
-router.get("/counts",validateJWT,getUserCounts)
-router.get("/",validateJWT,getAllUsers)
+router.get("/counts",validateJWT,getCounts)
 
 module.exports = router

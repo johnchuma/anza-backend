@@ -1,4 +1,4 @@
-const { User,Business,Product } = require("../../models");
+const { User,Business,Product,Payment } = require("../../models");
 
 const { successResponse, errorResponse } = require("../../utils/responses");
 const {Op} = require("sequelize");
@@ -97,7 +97,7 @@ const {Op} = require("sequelize");
             role: "admin"
           }
         })
-        const revenue = await Payment.count('amount')
+        const revenue = await Payment.sum('amount')
 
         const products = await Product.count({})
 

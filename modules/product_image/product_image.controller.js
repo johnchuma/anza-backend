@@ -29,17 +29,17 @@ try {
         try {
            
             const uuid = req.params.uuid
-            const ProductImage = await ProductImage.findOne({
+            const productImage = await ProductImage.findOne({
                 where:{
                     uuid
                 }
             });
-            const response = await ProductImage.destroy()
+            const response = await productImage.destroy()
             successResponse(res,response)
         } catch (error) {
             errorResponse(res,error)
         }
-        }
+    }
     
 
 
