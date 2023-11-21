@@ -35,40 +35,43 @@ const {Op} = require("sequelize");
             status: "delivered"
           }
         })
-        
-        const profit = await OrderProduct.count({
-            include:{
-                model:Product,
-                include:{
-                    model:Business,
-                    where:{
-                        userId:user.id
-                    }
-                }
-            },
-            attributes:{
-                include: [
-                    [
-                        Sequelize.literal(`(
-                            SELECT AVG(rate)
-                            FROM Product AS product
-                            WHERE
-                                id = OrderProduct.productId
-                        )`),
-                        'buyingPrice'
-                    ],
-                    [
-                        Sequelize.literal(`(
-                            SELECT count(*)
-                            FROM Product AS product
-                            WHERE
-                                id = OrderProduct.productId
-                        )`),
-                        'sellingPrice'
-                    ]
-                ],
+        // PROFIT
+        const business = await Business.findAll({
+            where:{
+                userId:user.id
             }
         })
+        const profit = await OrderProduct.findAll({
+            include:{
+                model:Product,
+                where:{
+                    businessId:business.id,
+                }
+            },
+            // attributes:{
+            //     include: [
+            //         [
+            //             Sequelize.literal(`(
+            //                 SELECT AVG(rate)
+            //                 FROM Product AS product
+            //                 WHERE
+            //                     id = OrderProduct.productId
+            //             )`),
+            //             'buyingPrice'
+            //         ],
+            //         [
+            //             Sequelize.literal(`(
+            //                 SELECT count(*)
+            //                 FROM Product AS product
+            //                 WHERE
+            //                     id = OrderProduct.productId
+            //             )`),
+            //             'sellingPrice'
+            //         ]
+            //     ],
+            // }
+        })
+        // END PROFIT
         const sales = await OrderProduct.count({
             include:{
                 model:Product,
