@@ -17,7 +17,7 @@ const createProduct = async(req,res)=>{
             }
         });
         const response = await Product.create({
-            name,oldPrice,newPrice,amount,isFeatured,description,businessId:business.id
+            name,buyingPrice,sellingPrice,amount,isFeatured,description,businessId:business.id
         })
         successResponse(res,response)
     } catch (error) {
