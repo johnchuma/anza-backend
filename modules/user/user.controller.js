@@ -344,6 +344,29 @@ const loginUser = async (req, res) => {
     }
   }
 
+  const getUserCounts = async(req,res)=>{
+    try {
+        const customers = await User.count({
+          where:{
+            role: "customer"
+          }
+        })
+        const sellers = await User.count({
+          where:{
+            role: "seller"
+          }
+        })
+        const admins = await User.count({
+          where:{
+            role: "admin"
+          }
+        })
+        successResponse(res,{customers:customers, sellers:sellers, admins:admins})
+    } catch (error) {
+        errorResponse(res,error)
+    }
+  }
+
 const getMyDetails = async(req,res)=>{
   const user = req.user
   try {
@@ -482,5 +505,6 @@ const getUserDetails = async(req,res)=>{
     getAllCustomers,
     getAllSellers,
     getAllAdmins,
+    getUserCounts,
     getMyDetails
   }
