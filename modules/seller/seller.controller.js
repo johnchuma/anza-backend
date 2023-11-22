@@ -5,7 +5,7 @@ const {Op} = require("sequelize");
 
 
   const getCounts = async(req,res)=>{
-    var totalBuyingPrice = 0,totalSellingPrice = 0
+    var totalBuyingPrice = 0,totalSellingPrice = 0, profit = 0
     const user = req.user
     try {
         const pending = await OrderProduct.count({
@@ -36,55 +36,53 @@ const {Op} = require("sequelize");
             status: "delivered"
           }
         })
-        // PROFIT
+        // CALCULATE PROFIT
         const business = await Business.findOne({
             where:{
                 userId:user.id
             }
         })
-        const profit = await OrderProduct.findAll({
+        const profit_query = await OrderProduct.findAll({
             include:{
                 model:Product,
                 where:{
                     businessId:business.id,
                 }
             },
-            attributes:{
-                include: [
-                    [
-                        Sequelize.literal(`(
-                            SELECT buyingPrice
-                            FROM Products AS product
-                            WHERE
-                                id = OrderProduct.productId
-                        )`),
-                        'buyingPrice'
-                    ],
-                    [
-                        Sequelize.literal(`(
-                            SELECT sellingPrice
-                            FROM Products AS product
-                            WHERE
-                                id = OrderProduct.productId
-                        )`),
-                        'sellingPrice'
-                    ]
-                ],
-            },
+            // attributes:{
+            //     include: [
+            //         [
+            //             Sequelize.literal(`(
+            //                 SELECT buyingPrice
+            //                 FROM Products AS product
+            //                 WHERE
+            //                     id = OrderProduct.productId
+            //             )`),
+            //             'buyingPrice'
+            //         ],
+            //         [
+            //             Sequelize.literal(`(
+            //                 SELECT sellingPrice
+            //                 FROM Products AS product
+            //                 WHERE
+            //                     id = OrderProduct.productId
+            //             )`),
+            //             'sellingPrice'
+            //         ]
+            //     ],
+            // },
         })
-        // res.send(profit[0].Product)
-        for (let index = 0; index < profit.length; index++) {
-            const element = profit[index];
+        for (let index = 0; index < profit_query.length; index++) {
+            const element = profit_query[index];
             // res.send({data: element})
             // res.send({data: element.quantity})
             // res.send({data: element.Product.buyingPrice})
 
             totalBuyingPrice += element.Product.buyingPrice * element.quantity
             totalSellingPrice += element.Product.sellingPrice * element.quantity
-            
         }
-        const difference = totalSellingPrice - totalBuyingPrice
-        // END PROFIT
+        profit = totalSellingPrice - totalBuyingPrice
+        // END CALCULATE PROFIT
         const sales = await OrderProduct.count({
             include:{
                 model:Product,
@@ -128,7 +126,7 @@ const {Op} = require("sequelize");
             }
         })
 
-        successResponse(res,{pending:pending, complete:complete, profit: difference, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock,
+        successResponse(res,{pending:pending, complete:complete, profit: profit, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock,
             totalBuyingPrice:totalBuyingPrice,totalSellingPrice:totalSellingPrice,  })
     } catch (error) {
         errorResponse(res,error)

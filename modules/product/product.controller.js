@@ -244,7 +244,29 @@ const getBusinessSectorProducts = async(req,res)=>{
             include: [
                 ProductImage,{
                 model: Business,
-                attributes:{exclude:['UserId','BusinessSectorId']},
+                attributes:{
+                    exclude: ['UserId','BusinessSectorId'],
+                    include: [
+                        [
+                            Sequelize.literal(`(
+                                SELECT AVG(rate)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'rating'
+                        ],
+                        [
+                            Sequelize.literal(`(
+                                SELECT count(*)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'ratingCount'
+                        ]
+                    ],
+                },
                 where: {
                     businessSectorId: businessSector.id
                 }
