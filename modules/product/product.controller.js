@@ -240,32 +240,34 @@ const getBusinessSectorProducts = async(req,res)=>{
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
-            attributes:{exclude:['BusinessId']},
+            attributes:{
+                exclude:['BusinessId'],
+                include: [
+                    [
+                        Sequelize.literal(`(
+                            SELECT AVG(rate)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'rating'
+                    ],
+                    [
+                        Sequelize.literal(`(
+                            SELECT count(*)
+                            FROM Reviews AS review
+                            WHERE
+                                productId = Product.id
+                        )`),
+                        'ratingCount'
+                    ]
+                ],
+            },
             include: [
                 ProductImage,{
                 model: Business,
                 attributes:{
                     exclude: ['UserId','BusinessSectorId'],
-                    include: [
-                        [
-                            Sequelize.literal(`(
-                                SELECT AVG(rate)
-                                FROM Reviews AS review
-                                WHERE
-                                    productId = Product.id
-                            )`),
-                            'rating'
-                        ],
-                        [
-                            Sequelize.literal(`(
-                                SELECT count(*)
-                                FROM Reviews AS review
-                                WHERE
-                                    productId = Product.id
-                            )`),
-                            'ratingCount'
-                        ]
-                    ],
                 },
                 where: {
                     businessSectorId: businessSector.id
