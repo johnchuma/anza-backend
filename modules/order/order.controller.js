@@ -23,6 +23,14 @@ const createOrder = async(req,res)=>{
                 quantity:item.quantity
             })
         }
+
+        // const response = await Payment.create({
+        //     userId:user.id,
+        //     orderId:order.id,
+        //     amount,
+        //     agent,
+        // })
+
         sendEmail(req, res, user, 'order')
         successResponse(res,order)
     } catch (error) {
