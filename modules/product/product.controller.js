@@ -53,7 +53,10 @@ const getProducts = async(req,res)=>{
             limit: limit, //leta ngapi
             include:{
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             },
             attributes:{
                 exclude:["BusinessId"],
@@ -146,7 +149,10 @@ const BusinessProducts = async(req,res)=>{
             limit: limit, //leta ngapi
             include:{
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             },
             where:{
                 BusinessId:business.id
@@ -191,7 +197,10 @@ const getFeaturedProducts = async(req,res)=>{
             },
             include: {
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             },
             attributes:{
                 exclude: ["BusinessId"],
@@ -313,7 +322,10 @@ const getTopRatedProducts = async(req,res)=>{
             ],
             include: {
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             }
         });
         successResponse(res,product)
@@ -363,7 +375,10 @@ const getTopSellingProducts = async(req, res) =>{
             ],
             include: {
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             }
         })
         successResponse(res, response)
@@ -411,7 +426,10 @@ const searchProduct = async(req, res) => {
             },
             include: {
                 model:ProductImage,
-                required: true
+                required: true,
+                order: [
+                    ['createdAt', 'ASC']
+                ],
             }
         })
         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
