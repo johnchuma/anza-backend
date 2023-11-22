@@ -5,7 +5,7 @@ const {Op} = require("sequelize");
 
 
   const getCounts = async(req,res)=>{
-    var totalBuyingPrice,totalSellingPrice
+    var totalBuyingPrice = 0,totalSellingPrice = 0
     const user = req.user
     try {
         const pending = await OrderProduct.count({
@@ -73,10 +73,17 @@ const {Op} = require("sequelize");
             },
         })
         // res.send(profit[0].Product)
-        profit.forEach(element => {
-            totalBuyingPrice += element.buyingPrice * element.quantity
-            totalSellingPrice += element.sellingPrice * element.quantity
-        });
+        for (let index = 0; index < profit.length; index++) {
+            const element = profit[index];
+            // res.send({data: element})
+            // res.send({data: element.quantity})
+            // res.send({data: element.Product.buyingPrice})
+
+            totalBuyingPrice += element.Product.buyingPrice * element.quantity
+            totalSellingPrice += element.Product.sellingPrice * element.quantity
+            
+        }
+        const difference = totalSellingPrice - totalBuyingPrice
         // END PROFIT
         const sales = await OrderProduct.count({
             include:{
@@ -121,7 +128,7 @@ const {Op} = require("sequelize");
             }
         })
 
-        successResponse(res,{pending:pending, complete:complete, profit: profit, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock,
+        successResponse(res,{pending:pending, complete:complete, profit: difference, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock,
             totalBuyingPrice:totalBuyingPrice,totalSellingPrice:totalSellingPrice,  })
     } catch (error) {
         errorResponse(res,error)
