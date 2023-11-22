@@ -106,7 +106,7 @@ const {Op} = require("sequelize");
             status:"waiting"
           }
         })
-        successResponse(res,{customers:customers, sellers:sellers, admins:admins, revenue: revenue, products:products, applications:applications  })
+        successResponse(res,{customers:customers, sellers:sellers, admins:admins, revenue: revenue==null?0:revenue, products:products, applications:applications  })
     } catch (error) {
         errorResponse(res,error)
     }
