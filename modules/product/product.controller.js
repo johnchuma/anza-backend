@@ -51,6 +51,7 @@ const getProducts = async(req,res)=>{
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
+            distinct:true,
             include:{
                 model:ProductImage,
                 required: true,
@@ -147,6 +148,7 @@ const BusinessProducts = async(req,res)=>{
          const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
+            distinct:true,
             include:{
                 model:ProductImage,
                 required: true,
@@ -249,6 +251,7 @@ const getBusinessSectorProducts = async(req,res)=>{
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
+            distinct:true,
             attributes:{
                 exclude:['BusinessId'],
                 include: [
@@ -273,15 +276,21 @@ const getBusinessSectorProducts = async(req,res)=>{
                 ],
             },
             include: [
-                ProductImage,{
-                model: Business,
-                attributes:{
-                    exclude: ['UserId','BusinessSectorId'],
+                {
+                    model:ProductImage,
+                    required:true,
                 },
-                where: {
-                    businessSectorId: businessSector.id
+                {
+                    model: Business,
+                    required:true,
+                    attributes:{
+                        exclude: ['UserId','BusinessSectorId'],
+                    },
+                    where: {
+                        businessSectorId: businessSector.id
+                    }
                 }
-            }]
+            ]
         })
         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
         successResponse(res, {count, data:rows, page, totalPages})
@@ -398,6 +407,7 @@ const searchProduct = async(req, res) => {
         const {count, rows} = await Product.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
+            distinct:true,
             where:{
                 name: { [Op.like]: "%"+itemName+"%" },
             },
