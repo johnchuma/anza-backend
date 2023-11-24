@@ -34,7 +34,7 @@ const createSubscription = async(req,res)=>{
                 message: "Subscription already added!"
               });
         }
-
+        
     } catch (error) {
         errorResponse(res,error)
     }
