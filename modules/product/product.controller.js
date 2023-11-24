@@ -192,43 +192,93 @@ const BusinessProducts = async(req,res)=>{
 
 const getFeaturedProducts = async(req,res)=>{
     try {
-        const product = await Product.findAll({
-            limit: 8,
-            where:{
-                isFeatured:true
-            },
-            include: {
-                model:ProductImage,
-                required: true,
-                order: [
-                    ['createdAt', 'ASC']
-                ],
-            },
-            attributes:{
-                exclude: ["BusinessId"],
-                include: [
-                    [
-                        Sequelize.literal(`(
-                            SELECT AVG(rate)
-                            FROM Reviews AS review
-                            WHERE
-                                productId = Product.id
-                        )`),
-                        'rating'
+        let {page,limit} = req.query
+        if (page!=null) {
+            page = parseInt(page)
+            limit = parseInt(limit)
+            const offset = (page-1)*limit      
+
+            const {count, rows} = await Product.findAndCountAll({
+                offset: offset, //ruka ngapi
+                limit: limit, //leta ngapi
+                distinct:true,
+                where:{
+                    isFeatured:true
+                },
+                include: {
+                    model:ProductImage,
+                    required: true,
+                    order: [
+                        ['createdAt', 'ASC']
                     ],
-                    [
-                        Sequelize.literal(`(
-                            SELECT count(*)
-                            FROM Reviews AS review
-                            WHERE
-                                productId = Product.id
-                        )`),
-                        'ratingCount'
-                    ]
-                ],
-            }
-        });
-        successResponse(res,product)
+                },
+                attributes:{
+                    exclude: ["BusinessId"],
+                    include: [
+                        [
+                            Sequelize.literal(`(
+                                SELECT AVG(rate)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'rating'
+                        ],
+                        [
+                            Sequelize.literal(`(
+                                SELECT count(*)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'ratingCount'
+                        ]
+                    ],
+                }
+            });
+
+            const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
+            successResponse(res, {count, data:rows, page, totalPages})      
+        }else{
+            const product = await Product.findAll({
+                limit: 8,
+                where:{
+                    isFeatured:true
+                },
+                include: {
+                    model:ProductImage,
+                    required: true,
+                    order: [
+                        ['createdAt', 'ASC']
+                    ],
+                },
+                attributes:{
+                    exclude: ["BusinessId"],
+                    include: [
+                        [
+                            Sequelize.literal(`(
+                                SELECT AVG(rate)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'rating'
+                        ],
+                        [
+                            Sequelize.literal(`(
+                                SELECT count(*)
+                                FROM Reviews AS review
+                                WHERE
+                                    productId = Product.id
+                            )`),
+                            'ratingCount'
+                        ]
+                    ],
+                }
+            });
+            successResponse(res,product)
+        }
+
     } catch (error) {
         errorResponse(res,error)
     }
