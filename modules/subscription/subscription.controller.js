@@ -5,23 +5,33 @@ const {Subscription, Business, Product} = require("../../models");
 const createSubscription = async(req,res)=>{
     try {
         const {email,user_uuid} = req.body
-        if (user_uuid) {
-            const user = await User.findOne({
-                where:{
-                    email:email
-                }
-            })
-            const response = await Subscription.create({
-                email,
-                userId:user.id
-            })
-            successResponse(res,response)
-        }else{
-            const response = await Subscription.create({
+        const subscription = Subscription.findOne({
+            where:{
                 email
-            })
-            successResponse(res,response)
+            }
+        })
+        if (!subscription) {
+            if (user_uuid) {
+                const user = await User.findOne({
+                    where:{
+                        email:email
+                    }
+                })
+                const response = await Subscription.create({
+                    email,
+                    userId:user.id
+                })
+                successResponse(res,response)
+            }else{
+                const response = await Subscription.create({
+                    email
+                })
+                successResponse(res,response)
+            }            
+        }else{
+            errorResponse(res,{message:'Subscription already added!'})
         }
+
     } catch (error) {
         errorResponse(res,error)
     }
@@ -32,7 +42,7 @@ const getAllSubscriptions = async(req,res)=>{
         const uuid = req.params.uuid
         const response = await Subscription.findAll({
             attributes:{
-                exclude:["id"/*,"uuid","name","createdAt","updatedAt"*/]
+                // exclude:["id"/*,"uuid","name","createdAt","updatedAt"*/]
             },
         })
         successResponse(res,response)
