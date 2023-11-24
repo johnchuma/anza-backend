@@ -14,6 +14,7 @@ const Promotions =  require("./modules/promotion/promotion.routes")
 const Payments =  require("./modules/payment/payment.routes")
 const Admin =  require("./modules/admin/admin.routes")
 const Seller =  require("./modules/seller/seller.routes")
+const Subscription =  require("./modules/subscription/subscription.routes")
 
 
 const cors = require('cors')
@@ -36,6 +37,7 @@ app.use("/promotion",Promotions)
 app.use("/payment",Payments)
 app.use("/admin",Admin)
 app.use("/seller",Seller)
+app.use("/subscription",Subscription)
 
 app.get('/',(req,res)=>{
     res.send("Anza marketplace API's are okay!")
