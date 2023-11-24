@@ -73,20 +73,20 @@ const getSpecificBusinessOrders = async(req,res)=>{
             include:[
                 User,
                 {
-                model:OrderProduct,
-                required:true,
-                include:{
-                    model:Product,
-                    required: true,
-                    include:[ProductImage],
-                    where:{
-                        businessId:business.id
-                    },
-                    
+                    model:OrderProduct,
+                    required:true,
+                    include:{
+                        model:Product,
+                        required: true,
+                        include:[ProductImage],
+                        where:{
+                            businessId:business.id
+                        },
+                        
+                    }
                 }
-            }
         
-        ]
+            ]
         });
         
         successResponse(res,response)
