@@ -7,7 +7,7 @@ const createSubscription = async(req,res)=>{
         const {email,user_uuid} = req.body
         const subscription = Subscription.findOne({
             where:{
-                email
+                email:email
             }
         })
         if (!subscription) {
