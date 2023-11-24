@@ -29,7 +29,10 @@ const createSubscription = async(req,res)=>{
                 successResponse(res,response)
             }            
         }else{
-            errorResponse(res,{message:'Subscription already added!'})
+            res.status(403).json({
+                status: false,
+                message: "Subscription already added!"
+              });
         }
 
     } catch (error) {
