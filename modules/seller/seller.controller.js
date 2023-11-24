@@ -10,34 +10,52 @@ const {Op} = require("sequelize");
 
     if (user.Business) {
         try {
-            const pending = await OrderProduct.count({
+            const pending = await OrderProduct.sum('quantity',{
                 include:{
                     model:Product,
+                    required:true,
                     include:{
+                        required:true,
                         model:Business,
                         where:{
                             userId:user.id
                         }
                     }
                 },
-            where:{
-                status: "waiting"
-            }
+                where:{
+                    status: "waiting"
+                }
             })
-            const complete = await OrderProduct.count({
+            const complete = await OrderProduct.sum('quantity',{
                 include:{
                     model:Product,
+                    required:true,
                     include:{
+                        required:true,
                         model:Business,
                         where:{
                             userId:user.id
                         }
                     }
                 },
-            where:{
-                status: "delivered"
-            }
+                where:{
+                    status: "delivered"
+                }
             })
+            const sales = await OrderProduct.sum('quantity',{
+                include:{
+                    model:Product,
+                    required:true,
+                    include:{
+                        model:Business,
+                    required:true,
+                        where:{
+                            userId:user.id
+                        }
+                    }
+                },
+            })
+
             // CALCULATE PROFIT
             const business = await Business.findOne({
                 where:{
@@ -85,21 +103,11 @@ const {Op} = require("sequelize");
             }
             profit = totalSellingPrice - totalBuyingPrice
             // END CALCULATE PROFIT
-            const sales = await OrderProduct.count({
-                include:{
-                    model:Product,
-                    include:{
-                        model:Business,
-                        where:{
-                            userId:user.id
-                        }
-                    }
-                },
-            })
 
             const products = await Product.count({
                 include:{
                     model:Business,
+                    required:true,
                     where:{
                         userId:user.id,
                     }
@@ -108,6 +116,7 @@ const {Op} = require("sequelize");
             const in_stock = await Product.count({
                 include:{
                     model:Business,
+                    required:true,
                     where:{
                         userId:user.id,
                     }
@@ -119,6 +128,7 @@ const {Op} = require("sequelize");
             const out_stock = await Product.count({
                 include:{
                     model:Business,
+                    required:true,
                     where:{
                         userId:user.id,
                     }
@@ -128,7 +138,7 @@ const {Op} = require("sequelize");
                 }
             })
 
-            successResponse(res,{pending:pending, complete:complete, profit: profit, sales: sales, products:products, in_stock:in_stock, out_stock:out_stock,
+            successResponse(res,{pending:pending==null?0:pending, complete:complete==null?0:complete, sales: sales==null?0:sales, profit: profit, products:products, in_stock:in_stock, out_stock:out_stock,
                 totalBuyingPrice:totalBuyingPrice,totalSellingPrice:totalSellingPrice,  })
         } catch (error) {
             errorResponse(res,error)
