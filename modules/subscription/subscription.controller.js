@@ -5,9 +5,9 @@ const {Subscription, Business, Product} = require("../../models");
 const createSubscription = async(req,res)=>{
     try {
         const {email,user_uuid} = req.body
-        const subscription = Subscription.findOne({
+        const subscription = await Subscription.findOne({
             where:{
-                email:email
+                email
             }
         })
         if (!subscription) {
