@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
-const {Subscription, Business, Product} = require("../../models");
+const {Subscription, User, Product} = require("../../models");
 
 
 const createSubscription = async(req,res)=>{
@@ -14,7 +14,7 @@ const createSubscription = async(req,res)=>{
             if (user_uuid) {
                 const user = await User.findOne({
                     where:{
-                        email:email
+                        uuid:user_uuid
                     }
                 })
                 const response = await Subscription.create({
