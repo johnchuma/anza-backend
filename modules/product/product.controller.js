@@ -241,7 +241,7 @@ const getFeaturedProducts = async(req,res)=>{
             successResponse(res, {count, data:rows, page, totalPages})      
         }else{
             const product = await Product.findAll({
-                limit: 8,
+                limit: 12,
                 where:{
                     isFeatured:true
                 },
@@ -352,7 +352,7 @@ const getBusinessSectorProducts = async(req,res)=>{
 const getTopRatedProducts = async(req,res)=>{
     try {
         const product = await Product.findAll({
-            limit: 8,
+            limit: 12,
             attributes:{
                 exclude: ['BusinessId'],
                 include: [
