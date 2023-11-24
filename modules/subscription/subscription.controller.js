@@ -27,7 +27,7 @@ const createSubscription = async(req,res)=>{
     }
 }
 
-const getAllSubscription = async(req,res)=>{
+const getAllSubscriptions = async(req,res)=>{
     try {
         const uuid = req.params.uuid
         const response = await Subscription.findAll({
@@ -73,4 +73,4 @@ const deleteSubscription = async(req,res)=>{
     }
 }
 
-module.exports = {createSubscription, getSubscription, getAllSubscription, getSubscriptionProducts, deleteSubscription}
+module.exports = {createSubscription, getSubscription, getAllSubscriptions, deleteSubscription}
