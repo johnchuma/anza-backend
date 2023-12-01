@@ -122,7 +122,15 @@ const getProduct = async(req,res)=>{
                 ],
             },
             include:[
-                Review,ProductImage,Business
+                Review,ProductImage,
+                {
+                    model: Business,
+                    required: true,
+                    include: {
+                        model: BusinessSector,
+                        required: true
+                    }
+                }
             ]
         });
         successResponse(res,product)
