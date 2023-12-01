@@ -123,9 +123,10 @@ const getProduct = async(req,res)=>{
             },
             include:[
                 Review,ProductImage,
-                {model:Business,
-                    attributes:{exclude:["businessId"],}
-                }
+                // {
+                //     model:Business,
+                //     attributes:{exclude:["BusinessId"],}
+                // }
             ]
         });
         successResponse(res,product)
