@@ -99,7 +99,7 @@ const getProduct = async(req,res)=>{
                 uuid
             },
             attributes:{
-                exclude:["BusinessId"], 
+                exclude:["businessId"], 
                 include: [
                     [
                         Sequelize.literal(`(
@@ -122,11 +122,7 @@ const getProduct = async(req,res)=>{
                 ],
             },
             include:[
-                Review,ProductImage,
-                // {
-                //     model:Business,
-                //     attributes:{exclude:["BusinessId"],}
-                // }
+                Review,ProductImage,Business
             ]
         });
         successResponse(res,product)
