@@ -9,7 +9,7 @@ const sendEmail = async (req, res,user,status) => {
       switch (status) {
         case "accepted":
             subject = 'Your seller application to Anza Marketplace is accepted'
-            message = 'Hello '+user.name+',<br>This is to inform you that we have accepted your request to be a seller,<br>You can now start adding your products to Anza marketplace store.'
+            message = 'Hello '+user.name+',<br>This is to inform you that we have accepted your request to be a seller,<br>You can now start adding your products to Anza marketplace store.<br><div class="center"><a href="https://testingwebprojects.com/dashboard"><button class="btn btn-sm" style="background-color: #002D62;font-size: 12px;">Go to seller dashboard</button></a> </div>'
             response =   await sendMail(user, subject, message, status);
           break;
         case "rejected":
