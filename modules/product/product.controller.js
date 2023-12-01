@@ -124,7 +124,7 @@ const getProduct = async(req,res)=>{
             include:[
                 Review,ProductImage,
                 {model:Business,
-                    attributes:{exclude:["BusinessId"],}
+                    attributes:{exclude:["businessId"],}
                 }
             ]
         });
