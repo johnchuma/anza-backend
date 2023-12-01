@@ -126,6 +126,7 @@ const getProduct = async(req,res)=>{
                 {
                     model: Business,
                     required: true,
+                    attributes:{exclude:['userId','businessSectorId']},
                     include: {
                         model: BusinessSector,
                         required: true
